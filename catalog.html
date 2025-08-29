@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo - Cafetería Escolar</title>
+    <!-- PWA Configuration -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2c3e50">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .filters {
+            padding: 20px;
+            background: #f8f9fa;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .filter-btn {
+            background: white;
+            border: 2px solid #3498db;
+            color: #3498db;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .filter-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        .product-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .product-category {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .product-price {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+        .product-stock {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        .stock-available {
+            background: #d4edda;
+            color: #155724;
+        }
+        .stock-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .stock-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .last-updated {
+            text-align: center;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Cafetería Escolar</h1>
+            <p>Menú Disponible Hoy</p>
+        </div>
+        
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
+            <button class="filter-btn" onclick="filterProducts('desayuno')">Desayuno</button>
+            <button class="filter-btn" onclick="filterProducts('almuerzo')">Almuerzo</button>
+            <button class="filter-btn" onclick="filterProducts('merienda')">Merienda</button>
+            <button class="filter-btn" onclick="filterProducts('bebidas')">Bebidas</button>
+            <button class="filter-btn" onclick="filterProducts('snacks')">Snacks</button>
+        </div>
+        
+        <div class="products-grid" id="productsContainer">
+            <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                <p>🔄 Cargando productos...</p>
+            </div>
+        </div>
+        
+        <div class="last-updated" id="lastUpdated">
+            Última actualización: Cargando...
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiDgpN9_nKneeYQ9vW41aBxwo3VWZnBN0",
+            authDomain: "cafeteria-escolar.firebaseapp.com",
+            databaseURL: "https://cafeteria-escolar-default-rtdb.firebaseio.com",
+            projectId: "cafeteria-escolar",
+            storageBucket: "cafeteria-escolar.firebasestorage.app",
+            messagingSenderId: "246584307812",
+            appId: "1:246584307812:web:2daa42239391f47248ef71",
+            measurementId: "G-GFJGNKFWLJ"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Referencia a la colección de productos
+        const productsRef = database.ref('products');
+        let allProducts = {};
+        let currentFilter = 'all';
+
+        // Escuchar cambios en tiempo real
+        productsRef.on('value', (snapshot) => {
+            allProducts = snapshot.val() || {};
+            filterProducts(currentFilter);
+            updateLastUpdated();
+        });
+
+        function filterProducts(category) {
+            currentFilter = category;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event?.target?.classList?.add('active');
+            
+            const container = document.getElementById('productsContainer');
+            
+            if (!allProducts || Object.keys(allProducts).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                        <h3>📭 No hay productos disponibles</h3>
+                        <p>Vuelve más tarde para ver nuestro menú</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let filteredProducts = {};
+            if (category === 'all') {
+                filteredProducts = allProducts;
+            } else {
+                Object.keys(allProducts).forEach(key => {
+                    if (allProducts[key].category === category) {
+                        filteredProducts[key] = allProducts[key];
+                    }
+                });
+            }
+            
+            if (Object.keys(filteredProducts).length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                        <h3>📭 No hay productos en esta categoría</h3>
+                        <p>Prueba con otra categoría</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            Object.keys(filteredProducts).forEach(key => {
+                const product = filteredProducts[key];
+                html += `
+                    <div class="product-card">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-category">${getCategoryName(product.category)}</div>
+                        <div class="product-price">$${product.price.toLocaleString('es-CO')}</div>
+                        <div class="product-stock ${getStockClass(product.quantity)}">
+                            ${getStockText(product.quantity)}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'desayuno': '🌅 Desayuno',
+                'almuerzo': '🍽️ Almuerzo',
+                'merienda': '🍪 Merienda',
+                'bebidas': '🥤 Bebidas',
+                'snacks': '🍟 Snacks'
+            };
+            return categories[category] || category;
+        }
+
+        function getStockClass(quantity) {
+            if (quantity === 0) return 'stock-out';
+            if (quantity <= 5) return 'stock-low';
+            return 'stock-available';
+        }
+
+        function getStockText(quantity) {
+            if (quantity === 0) return '❌ Agotado';
+            if (quantity <= 5) return `⚠️ Solo ${quantity} disponibles`;
+            return `✅ ${quantity} disponibles`;
+        }
+
+        function updateLastUpdated() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('lastUpdated').textContent = 
+                `Última actualización: ${now.toLocaleDateString('es-ES', options)}`;
+        }
+
+        // Inicializar con todos los productos
+        filterProducts('all');
+    </script>
+</body>
+</html>
