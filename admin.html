@@ -14,21 +14,23 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e6f7ff 0%, #d0edff 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            border: 1px solid #e0e7ff;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -68,7 +70,7 @@
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e7ff;
             transition: all 0.3s ease;
         }
         .card:hover {
@@ -76,12 +78,13 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         .card h3 {
-            color: #2c3e50;
+            color: #1e40af;
             margin-bottom: 20px;
             font-size: 1.5em;
             display: flex;
             align-items: center;
             gap: 10px;
+            font-weight: 600;
         }
         .form-group {
             margin-bottom: 20px;
@@ -89,13 +92,13 @@
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #2c3e50;
+            color: #333;
             font-weight: 500;
         }
         .form-group input, .form-group select {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e8f4f8;
+            border: 2px solid #e0e7ff;
             border-radius: 10px;
             font-size: 16px;
             transition: all 0.3s ease;
@@ -103,12 +106,12 @@
         }
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #3b82f6;
             background: white;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         .btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -123,7 +126,7 @@
         }
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
         }
         .inventory-table {
             width: 100%;
@@ -138,11 +141,11 @@
         }
         .inventory-table th {
             background: #f8f9fa;
-            color: #2c3e50;
+            color: #333;
             font-weight: 600;
         }
         .inventory-table tr:hover {
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba(59, 130, 246, 0.05);
         }
         .status-badge {
             padding: 4px 12px;
@@ -169,7 +172,7 @@
             margin-bottom: 20px;
         }
         .stat-card {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
             color: white;
             padding: 20px;
             border-radius: 10px;
