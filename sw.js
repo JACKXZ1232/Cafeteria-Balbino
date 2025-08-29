@@ -1,6 +1,7 @@
-const CACHE_NAME = 'cafeteria-v1';
+const CACHE_NAME = 'cafeteria-v2';
 const urlsToCache = [
   '/',
+  '/index.html',
   '/admin.html',
   '/catalog.html',
   '/manifest.json'
