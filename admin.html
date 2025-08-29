@@ -15,24 +15,40 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
         .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         .main-content {
             display: grid;
@@ -40,11 +56,32 @@
             gap: 30px;
             padding: 30px;
         }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+        }
         .card {
             background: white;
             border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .form-group {
             margin-bottom: 20px;
@@ -61,9 +98,17 @@
             border: 2px solid #e8f4f8;
             border-radius: 10px;
             font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8fcff;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .btn {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
             padding: 12px 25px;
@@ -71,6 +116,14 @@
             cursor: pointer;
             font-size: 16px;
             font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
         .inventory-table {
             width: 100%;
@@ -86,6 +139,10 @@
         .inventory-table th {
             background: #f8f9fa;
             color: #2c3e50;
+            font-weight: 600;
+        }
+        .inventory-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
         }
         .status-badge {
             padding: 4px 12px;
@@ -105,12 +162,27 @@
             background: #f8d7da;
             color: #721c24;
         }
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px;
-            }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
         }
     </style>
 </head>
@@ -118,7 +190,7 @@
     <div class="container">
         <div class="header">
             <h1>🍽️ Panel de Administración</h1>
-            <p>Cafetería Escolar - Gestión de Inventario</p>
+            <p>Cafetería Escolar - Gestión de Menú</p>
         </div>
         <div class="main-content">
             <!-- Registro de Productos -->
@@ -137,14 +209,11 @@
                     <input type="number" id="quantity" placeholder="0" min="0">
                 </div>
                 <div class="form-group">
-                    <label>Categoría</label>
+                    <label>Jornada</label>
                     <select id="category">
-                        <option value="">Seleccionar categoría</option>
-                        <option value="desayuno">Desayuno</option>
-                        <option value="almuerzo">Almuerzo</option>
+                        <option value="">Seleccionar jornada</option>
+                        <option value="media_mañana">Media Mañana</option>
                         <option value="merienda">Merienda</option>
-                        <option value="bebidas">Bebidas</option>
-                        <option value="snacks">Snacks</option>
                     </select>
                 </div>
                 <button class="btn" onclick="addProduct()">
@@ -154,15 +223,25 @@
             
             <!-- Inventario Actual -->
             <div class="card">
-                <h3>📦 Inventario Actual</h3>
-                <div style="max-height: 400px; overflow-y: auto;">
+                <h3>📦 Menú Actual</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">Productos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="lowStock">0</div>
+                        <div class="stat-label">Stock Bajo</div>
+                    </div>
+                </div>
+                <div style="max-height: 300px; overflow-y: auto;">
                     <table class="inventory-table">
                         <thead>
                             <tr>
                                 <th>Producto</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
-                                <th>Estado</th>
+                                <th>Jornada</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -203,6 +282,7 @@
         productsRef.on('value', (snapshot) => {
             const data = snapshot.val();
             updateInventoryDisplay(data);
+            updateStats(data);
         });
 
         function addProduct() {
@@ -291,8 +371,7 @@
                 html += `
                     <tr>
                         <td>
-                            <strong>${product.name}</strong><br>
-                            <small style="color: #7f8c8d;">${product.category}</small>
+                            <strong>${product.name}</strong>
                         </td>
                         <td>$${product.price.toLocaleString('es-CO')}</td>
                         <td>
@@ -300,11 +379,7 @@
                                    onchange="updateProduct('${key}', this.value)" 
                                    style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
                         </td>
-                        <td>
-                            <span class="status-badge ${getStatusClass(product.quantity)}">
-                                ${getStatusText(product.quantity)}
-                            </span>
-                        </td>
+                        <td>${getCategoryName(product.category)}</td>
                         <td>
                             <button onclick="deleteProduct('${key}')" 
                                     style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
@@ -317,16 +392,26 @@
             tbody.innerHTML = html;
         }
 
-        function getStatusClass(quantity) {
-            if (quantity === 0) return 'status-out';
-            if (quantity <= 5) return 'status-low';
-            return 'status-available';
+        function updateStats(products) {
+            if (!products) {
+                document.getElementById('totalProducts').textContent = '0';
+                document.getElementById('lowStock').textContent = '0';
+                return;
+            }
+
+            const totalProducts = Object.keys(products).length;
+            const lowStock = Object.values(products).filter(p => p.quantity <= 5).length;
+            
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('lowStock').textContent = lowStock;
         }
 
-        function getStatusText(quantity) {
-            if (quantity === 0) return 'Agotado';
-            if (quantity <= 5) return 'Poco Stock';
-            return 'Disponible';
+        function getCategoryName(category) {
+            const categories = {
+                'media_mañana': '🌅 Media Mañana',
+                'merienda': '🍪 Merienda'
+            };
+            return categories[category] || category;
         }
     </script>
 </body>
