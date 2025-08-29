@@ -6,7 +6,7 @@
     <title>Menú - Cafetería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#667eea">
+    <meta name="theme-color" content="#3b82f6">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -17,21 +17,23 @@
             box-sizing: border-box;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e6f7ff 0%, #d0edff 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #333;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
             overflow: hidden;
+            border: 1px solid #e0e7ff;
         }
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
             color: white;
             padding: 30px;
             text-align: center;
@@ -63,8 +65,8 @@
         }
         .filter-btn {
             background: white;
-            border: 2px solid #667eea;
-            color: #667eea;
+            border: 2px solid #3b82f6;
+            color: #3b82f6;
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
@@ -73,10 +75,10 @@
         }
         .filter-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
         }
         .filter-btn.active {
-            background: #667eea;
+            background: #3b82f6;
             color: white;
         }
         .products-grid {
@@ -91,7 +93,7 @@
             padding: 20px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
-            border: 1px solid #eee;
+            border: 1px solid #e0e7ff;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.6s forwards;
@@ -116,7 +118,7 @@
         .product-name {
             font-size: 1.2em;
             font-weight: 600;
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 10px;
         }
         .product-category {
@@ -127,7 +129,7 @@
         .product-price {
             font-size: 1.5em;
             font-weight: 700;
-            color: #667eea;
+            color: #3b82f6;
             margin-bottom: 10px;
         }
         .product-stock {
@@ -161,7 +163,7 @@
             grid-column: 1 / -1;
         }
         .empty-state h3 {
-            color: #2c3e50;
+            color: #333;
             margin-bottom: 10px;
         }
         .loading {
