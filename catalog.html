@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Cafetería Escolar</title>
+    <title>Menú - Cafetería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2c3e50">
+    <meta name="theme-color" content="#667eea">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -18,24 +18,40 @@
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             padding: 20px;
         }
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            backdrop-filter: blur(10px);
         }
         .header {
-            background: linear-gradient(135deg, #27ae60, #229954);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 30px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
         .filters {
             padding: 20px;
@@ -47,15 +63,20 @@
         }
         .filter-btn {
             background: white;
-            border: 2px solid #3498db;
-            color: #3498db;
+            border: 2px solid #667eea;
+            color: #667eea;
             padding: 8px 15px;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .filter-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
         }
         .filter-btn.active {
-            background: #3498db;
+            background: #667eea;
             color: white;
         }
         .products-grid {
@@ -68,13 +89,29 @@
             background: white;
             border-radius: 15px;
             padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: all 0.3s ease;
             border: 1px solid #eee;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s forwards;
+        }
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
+        .product-card:nth-child(5) { animation-delay: 0.5s; }
+        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
         .product-name {
             font-size: 1.2em;
@@ -90,7 +127,7 @@
         .product-price {
             font-size: 1.5em;
             font-weight: 700;
-            color: #27ae60;
+            color: #667eea;
             margin-bottom: 10px;
         }
         .product-stock {
@@ -118,6 +155,20 @@
             color: #7f8c8d;
             font-size: 0.9em;
         }
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            grid-column: 1 / -1;
+        }
+        .empty-state h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .loading {
+            text-align: center;
+            padding: 50px;
+            grid-column: 1 / -1;
+        }
         @media (max-width: 768px) {
             .products-grid {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -135,15 +186,12 @@
         
         <div class="filters">
             <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-            <button class="filter-btn" onclick="filterProducts('desayuno')">Desayuno</button>
-            <button class="filter-btn" onclick="filterProducts('almuerzo')">Almuerzo</button>
-            <button class="filter-btn" onclick="filterProducts('merienda')">Merienda</button>
-            <button class="filter-btn" onclick="filterProducts('bebidas')">Bebidas</button>
-            <button class="filter-btn" onclick="filterProducts('snacks')">Snacks</button>
+            <button class="filter-btn" onclick="filterProducts('media_mañana')">🌅 Media Mañana</button>
+            <button class="filter-btn" onclick="filterProducts('merienda')">🍪 Merienda</button>
         </div>
         
         <div class="products-grid" id="productsContainer">
-            <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+            <div class="loading">
                 <p>🔄 Cargando productos...</p>
             </div>
         </div>
@@ -195,7 +243,7 @@
             
             if (!allProducts || Object.keys(allProducts).length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
+                    <div class="empty-state">
                         <h3>📭 No hay productos disponibles</h3>
                         <p>Vuelve más tarde para ver nuestro menú</p>
                     </div>
@@ -216,9 +264,9 @@
             
             if (Object.keys(filteredProducts).length === 0) {
                 container.innerHTML = `
-                    <div style="text-align: center; padding: 50px; grid-column: 1 / -1;">
-                        <h3>📭 No hay productos en esta categoría</h3>
-                        <p>Prueba con otra categoría</p>
+                    <div class="empty-state">
+                        <h3>📭 No hay productos en esta jornada</h3>
+                        <p>Prueba con otra jornada</p>
                     </div>
                 `;
                 return;
@@ -244,11 +292,8 @@
 
         function getCategoryName(category) {
             const categories = {
-                'desayuno': '🌅 Desayuno',
-                'almuerzo': '🍽️ Almuerzo',
-                'merienda': '🍪 Merienda',
-                'bebidas': '🥤 Bebidas',
-                'snacks': '🍟 Snacks'
+                'media_mañana': '🌅 Media Mañana',
+                'merienda': '🍪 Merienda'
             };
             return categories[category] || category;
         }
