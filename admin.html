@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Cafetería Escolar</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e8f4f8;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .inventory-table th,
+        .inventory-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .inventory-table th {
+            background: #f8f9fa;
+            color: #2c3e50;
+        }
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-low {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Panel de Administración</h1>
+            <p>Cafetería Escolar - Gestión de Inventario</p>
+        </div>
+        <div class="main-content">
+            <!-- Registro de Productos -->
+            <div class="card">
+                <h3>➕ Registrar Nuevo Producto</h3>
+                <div class="form-group">
+                    <label>Nombre del Producto</label>
+                    <input type="text" id="productName" placeholder="Ej: Empanada de Carne">
+                </div>
+                <div class="form-group">
+                    <label>Precio (COP)</label>
+                    <input type="number" id="price" placeholder="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Cantidad Disponible</label>
+                    <input type="number" id="quantity" placeholder="0" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Categoría</label>
+                    <select id="category">
+                        <option value="">Seleccionar categoría</option>
+                        <option value="desayuno">Desayuno</option>
+                        <option value="almuerzo">Almuerzo</option>
+                        <option value="merienda">Merienda</option>
+                        <option value="bebidas">Bebidas</option>
+                        <option value="snacks">Snacks</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addProduct()">
+                    ✅ Agregar Producto
+                </button>
+            </div>
+            
+            <!-- Inventario Actual -->
+            <div class="card">
+                <h3>📦 Inventario Actual</h3>
+                <div style="max-height: 400px; overflow-y: auto;">
+                    <table class="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">
+                                    Cargando productos...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAiDgpN9_nKneeYQ9vW41aBxwo3VWZnBN0",
+            authDomain: "cafeteria-escolar.firebaseapp.com",
+            databaseURL: "https://cafeteria-escolar-default-rtdb.firebaseio.com",
+            projectId: "cafeteria-escolar",
+            storageBucket: "cafeteria-escolar.firebasestorage.app",
+            messagingSenderId: "246584307812",
+            appId: "1:246584307812:web:2daa42239391f47248ef71",
+            measurementId: "G-GFJGNKFWLJ"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Referencia a la colección de productos
+        const productsRef = database.ref('products');
+
+        // Cargar productos en tiempo real
+        productsRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            updateInventoryDisplay(data);
+        });
+
+        function addProduct() {
+            const name = document.getElementById('productName').value.trim();
+            const price = parseFloat(document.getElementById('price').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const category = document.getElementById('category').value;
+
+            if (!name || !price || !quantity || !category) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+
+            if (price <= 0 || quantity < 0) {
+                alert('El precio debe ser mayor a 0 y la cantidad no puede ser negativa');
+                return;
+            }
+
+            // Agregar producto a Firebase
+            const newProductRef = productsRef.push();
+            newProductRef.set({
+                name: name,
+                price: price,
+                quantity: quantity,
+                category: category,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            }).then(() => {
+                // Limpiar formulario
+                document.getElementById('productName').value = '';
+                document.getElementById('price').value = '';
+                document.getElementById('quantity').value = '';
+                document.getElementById('category').value = '';
+                alert('Producto agregado correctamente');
+            }).catch((error) => {
+                console.error('Error al agregar producto:', error);
+                alert('Error al agregar producto');
+            });
+        }
+
+        function updateProduct(key, quantity) {
+            if (quantity < 0) {
+                alert('La cantidad no puede ser negativa');
+                return;
+            }
+
+            productsRef.child(key).update({
+                quantity: quantity
+            }).then(() => {
+                alert('Producto actualizado');
+            }).catch((error) => {
+                console.error('Error al actualizar producto:', error);
+                alert('Error al actualizar producto');
+            });
+        }
+
+        function deleteProduct(key) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                productsRef.child(key).remove()
+                    .then(() => {
+                        alert('Producto eliminado');
+                    })
+                    .catch((error) => {
+                        console.error('Error al eliminar producto:', error);
+                        alert('Error al eliminar producto');
+                    });
+            }
+        }
+
+        function updateInventoryDisplay(products) {
+            const tbody = document.getElementById('inventoryTableBody');
+            
+            if (!products) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">
+                            No hay productos registrados
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            Object.keys(products).forEach(key => {
+                const product = products[key];
+                html += `
+                    <tr>
+                        <td>
+                            <strong>${product.name}</strong><br>
+                            <small style="color: #7f8c8d;">${product.category}</small>
+                        </td>
+                        <td>$${product.price.toLocaleString('es-CO')}</td>
+                        <td>
+                            <input type="number" value="${product.quantity}" 
+                                   onchange="updateProduct('${key}', this.value)" 
+                                   style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
+                        </td>
+                        <td>
+                            <span class="status-badge ${getStatusClass(product.quantity)}">
+                                ${getStatusText(product.quantity)}
+                            </span>
+                        </td>
+                        <td>
+                            <button onclick="deleteProduct('${key}')" 
+                                    style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function getStatusClass(quantity) {
+            if (quantity === 0) return 'status-out';
+            if (quantity <= 5) return 'status-low';
+            return 'status-available';
+        }
+
+        function getStatusText(quantity) {
+            if (quantity === 0) return 'Agotado';
+            if (quantity <= 5) return 'Poco Stock';
+            return 'Disponible';
+        }
+    </script>
+</body>
+</html>
