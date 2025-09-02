@@ -8,250 +8,513 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
+        :root {
+            /* Tema claro */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            /* Tema oscuro */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-primary: #60a5fa;
+            --accent-hover: #93c5fd;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e6f7ff 0%, #d0edff 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
-            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            border: 1px solid #e0e7ff;
-        }
-        .header {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+
+        /* Header mejorado */
+        .app-header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 1.5rem 2rem;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 30px;
-        }
-        @media (max-width: 768px) {
-            .main-content {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 20px;
-            }
-        }
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e0e7ff;
-            transition: all 0.3s ease;
-        }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        .card h3 {
-            color: #1e40af;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-weight: 600;
+            gap: 1rem;
         }
-        .form-group {
-            margin-bottom: 20px;
+
+        .logo-icon {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
         }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e7ff;
-            border-radius: 10px;
-            font-size: 16px;
+
+        .app-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Controles del tema */
+        .theme-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             transition: all 0.3s ease;
-            background: #f8fcff;
         }
-        .form-group input:focus, .form-group select:focus {
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Loader moderno */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--accent-primary);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        /* Contenido principal */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tarjetas mejoradas */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            height: fit-content;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Formularios mejorados */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus, .form-select:focus {
             outline: none;
-            border-color: #3b82f6;
-            background: white;
+            border-color: var(--accent-primary);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
+
         .btn {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 0.75rem 1.5rem;
             border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
+            font-size: 1rem;
             font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 0.5rem;
         }
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
         }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Tabla mejorada */
+        .table-container {
+            overflow-x: auto;
+        }
+
         .inventory-table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            border-collapse: separate;
+            border-spacing: 0;
         }
-        .inventory-table th,
-        .inventory-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ecf0f1;
-        }
+
         .inventory-table th {
-            background: #f8f9fa;
-            color: #333;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
             font-weight: 600;
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
+        .inventory-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .inventory-table tr:last-child td {
+            border-bottom: none;
+        }
+
         .inventory-table tr:hover {
             background: rgba(59, 130, 246, 0.05);
         }
+
+        /* Estados mejorados */
         .status-badge {
-            padding: 4px 12px;
+            padding: 0.25rem 0.75rem;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 0.8rem;
             font-weight: 500;
+            display: inline-block;
         }
+
         .status-available {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
         }
+
         .status-low {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
         }
+
         .status-out {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
         }
+
+        /* Estadísticas */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
         }
+
         .stat-card {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 1.5rem;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
+
         .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
         }
+
         .stat-label {
-            font-size: 0.9em;
+            font-size: 0.9rem;
             opacity: 0.9;
+        }
+
+        /* Animaciones */
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .theme-controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🍽️ Panel de Administración</h1>
-            <p>Cafetería Escolar - Gestión de Menú</p>
-        </div>
-        <div class="main-content">
-            <!-- Registro de Productos -->
-            <div class="card">
-                <h3>➕ Registrar Nuevo Producto</h3>
-                <div class="form-group">
-                    <label>Nombre del Producto</label>
-                    <input type="text" id="productName" placeholder="Ej: Empanada de Carne">
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-icon">🍽️</div>
+                <div>
+                    <h1 class="app-title">Panel de Administración</h1>
+                    <p class="app-subtitle">Cafetería Escolar</p>
                 </div>
-                <div class="form-group">
-                    <label>Precio (COP)</label>
-                    <input type="number" id="price" placeholder="0" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label>Cantidad Disponible</label>
-                    <input type="number" id="quantity" placeholder="0" min="0">
-                </div>
-                <div class="form-group">
-                    <label>Jornada</label>
-                    <select id="category">
-                        <option value="">Seleccionar jornada</option>
-                        <option value="media_mañana">Media Mañana</option>
-                        <option value="merienda">Merienda</option>
-                    </select>
-                </div>
-                <button class="btn" onclick="addProduct()">
-                    ✅ Agregar Producto
+            </div>
+            <div class="theme-controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeText">Modo Oscuro</span>
                 </button>
             </div>
-            
-            <!-- Inventario Actual -->
-            <div class="card">
-                <h3>📦 Menú Actual</h3>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalProducts">0</div>
-                        <div class="stat-label">Productos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="lowStock">0</div>
-                        <div class="stat-label">Stock Bajo</div>
-                    </div>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-container">
+        <!-- Estadísticas -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalProducts">0</div>
+                <div class="stat-label">Productos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="lowStock">0</div>
+                <div class="stat-label">Stock Bajo</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalValue">$0</div>
+                <div class="stat-label">Valor Total</div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard-grid">
+            <!-- Formulario de Registro -->
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">+</span>
+                        Registrar Producto
+                    </h2>
                 </div>
-                <div style="max-height: 300px; overflow-y: auto;">
+                <form id="productForm">
+                    <div class="form-group">
+                        <label class="form-label">Nombre del Producto</label>
+                        <input type="text" class="form-input" id="productName" placeholder="Ej: Empanada de Carne">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Precio (COP)</label>
+                        <input type="number" class="form-input" id="price" placeholder="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Cantidad Disponible</label>
+                        <input type="number" class="form-input" id="quantity" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Categoría</label>
+                        <select class="form-select" id="category">
+                            <option value="">Seleccionar categoría</option>
+                            <option value="media_mañana">Media Mañana</option>
+                            <option value="merienda">Merienda</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">
+                        ✅ Agregar Producto
+                    </button>
+                </form>
+            </div>
+
+            <!-- Inventario -->
+            <div class="card fade-in">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <span class="card-icon">📦</span>
+                        Inventario Actual
+                    </h2>
+                </div>
+                <div class="table-container">
                     <table class="inventory-table">
                         <thead>
                             <tr>
                                 <th>Producto</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
-                                <th>Jornada</th>
+                                <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="inventoryTableBody">
                             <tr>
-                                <td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">
-                                    Cargando productos...
+                                <td colspan="5">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">📭</div>
+                                        <p>No hay productos registrados</p>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -259,7 +522,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         // Configuración de Firebase
@@ -281,14 +544,140 @@
         // Referencia a la colección de productos
         const productsRef = database.ref('products');
 
-        // Cargar productos en tiempo real
-        productsRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            updateInventoryDisplay(data);
-            updateStats(data);
-        });
+        // Detectar tema del sistema
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
 
-        function addProduct() {
+        // Aplicar tema
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeText').textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('themeIcon').textContent = '🌙';
+                document.getElementById('themeText').textContent = 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        // Toggle tema
+        function toggleTheme() {
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        // Inicializar tema
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                const systemTheme = detectSystemTheme();
+                applyTheme(systemTheme);
+            }
+        }
+
+        // Funciones de utilidad
+        function getStatusClass(quantity) {
+            if (quantity === 0) return 'status-out';
+            if (quantity <= 5) return 'status-low';
+            return 'status-available';
+        }
+
+        function getStatusText(quantity) {
+            if (quantity === 0) return 'Agotado';
+            if (quantity <= 5) return 'Poco Stock';
+            return 'Disponible';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP'
+            }).format(amount);
+        }
+
+        // Actualizar estadísticas
+        function updateStats(products) {
+            if (!products) {
+                document.getElementById('totalProducts').textContent = '0';
+                document.getElementById('lowStock').textContent = '0';
+                document.getElementById('totalValue').textContent = '$0';
+                return;
+            }
+
+            const totalProducts = Object.keys(products).length;
+            const lowStock = Object.values(products).filter(p => p.quantity <= 5 && p.quantity > 0).length;
+            const totalValue = Object.values(products).reduce((sum, p) => sum + (p.price * p.quantity), 0);
+            
+            document.getElementById('totalProducts').textContent = totalProducts;
+            document.getElementById('lowStock').textContent = lowStock;
+            document.getElementById('totalValue').textContent = formatCurrency(totalValue);
+        }
+
+        // Actualizar tabla de inventario
+        function updateInventoryTable(products) {
+            const tbody = document.getElementById('inventoryTableBody');
+            
+            if (!products || Object.keys(products).length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div class="empty-icon">📭</div>
+                                <p>No hay productos registrados</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            let html = '';
+            Object.keys(products).forEach(key => {
+                const product = products[key];
+                html += `
+                    <tr>
+                        <td>
+                            <strong>${product.name}</strong>
+                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
+                            </div>
+                        </td>
+                        <td>${formatCurrency(product.price)}</td>
+                        <td>
+                            <input type="number" value="${product.quantity}" 
+                                   onchange="updateProduct('${key}', this.value)" 
+                                   style="width: 70px; padding: 0.25rem; border: 1px solid var(--border-color); border-radius: 5px; background: var(--bg-secondary); color: var(--text-primary);">
+                        </td>
+                        <td>
+                            <span class="status-badge ${getStatusClass(product.quantity)}">
+                                ${getStatusText(product.quantity)}
+                            </span>
+                        </td>
+                        <td>
+                            <button onclick="deleteProduct('${key}')" 
+                                    style="background: #ef4444; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        // Agregar producto
+        function addProduct(e) {
+            e.preventDefault();
+            
             const name = document.getElementById('productName').value.trim();
             const price = parseFloat(document.getElementById('price').value);
             const quantity = parseInt(document.getElementById('quantity').value);
@@ -314,17 +703,22 @@
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
                 // Limpiar formulario
-                document.getElementById('productName').value = '';
-                document.getElementById('price').value = '';
-                document.getElementById('quantity').value = '';
-                document.getElementById('category').value = '';
-                alert('Producto agregado correctamente');
+                document.getElementById('productForm').reset();
+                
+                // Feedback visual
+                const button = document.querySelector('.btn');
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Producto Agregado';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
             }).catch((error) => {
                 console.error('Error al agregar producto:', error);
                 alert('Error al agregar producto');
             });
         }
 
+        // Actualizar producto
         function updateProduct(key, quantity) {
             if (quantity < 0) {
                 alert('La cantidad no puede ser negativa');
@@ -332,90 +726,23 @@
             }
 
             productsRef.child(key).update({
-                quantity: quantity
+                quantity: parseInt(quantity)
             }).then(() => {
-                alert('Producto actualizado');
+                // Feedback visual
+                const button = document.querySelector('.btn');
+                const originalText = button ? button.innerHTML : '';
+                if (button) {
+                    button.innerHTML = '✅ Producto Actualizado';
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                    }, 2000);
+                }
             }).catch((error) => {
                 console.error('Error al actualizar producto:', error);
                 alert('Error al actualizar producto');
             });
         }
 
+        // Eliminar producto
         function deleteProduct(key) {
-            if (confirm('¿Estás seguro de eliminar este producto?')) {
-                productsRef.child(key).remove()
-                    .then(() => {
-                        alert('Producto eliminado');
-                    })
-                    .catch((error) => {
-                        console.error('Error al eliminar producto:', error);
-                        alert('Error al eliminar producto');
-                    });
-            }
-        }
-
-        function updateInventoryDisplay(products) {
-            const tbody = document.getElementById('inventoryTableBody');
-            
-            if (!products) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; color: #7f8c8d; padding: 40px;">
-                            No hay productos registrados
-                        </td>
-                    </tr>
-                `;
-                return;
-            }
-
-            let html = '';
-            Object.keys(products).forEach(key => {
-                const product = products[key];
-                html += `
-                    <tr>
-                        <td>
-                            <strong>${product.name}</strong>
-                        </td>
-                        <td>$${product.price.toLocaleString('es-CO')}</td>
-                        <td>
-                            <input type="number" value="${product.quantity}" 
-                                   onchange="updateProduct('${key}', this.value)" 
-                                   style="width: 60px; padding: 5px; border: 1px solid #ddd; border-radius: 5px;">
-                        </td>
-                        <td>${getCategoryName(product.category)}</td>
-                        <td>
-                            <button onclick="deleteProduct('${key}')" 
-                                    style="background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">
-                                🗑️
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            tbody.innerHTML = html;
-        }
-
-        function updateStats(products) {
-            if (!products) {
-                document.getElementById('totalProducts').textContent = '0';
-                document.getElementById('lowStock').textContent = '0';
-                return;
-            }
-
-            const totalProducts = Object.keys(products).length;
-            const lowStock = Object.values(products).filter(p => p.quantity <= 5).length;
-            
-            document.getElementById('totalProducts').textContent = totalProducts;
-            document.getElementById('lowStock').textContent = lowStock;
-        }
-
-        function getCategoryName(category) {
-            const categories = {
-                'media_mañana': '🌅 Media Mañana',
-                'merienda': '🍪 Merienda'
-            };
-            return categories[category] || category;
-        }
-    </script>
-</body>
-</html>
+            if (co
