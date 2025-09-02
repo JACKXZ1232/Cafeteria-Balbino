@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú - Cafetería Escolar</title>
+    <title>Catálogo - Cafetería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3b82f6">
@@ -11,197 +11,372 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
+        :root {
+            /* Tema claro */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-primary: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .dark-mode {
+            /* Tema oscuro */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-primary: #60a5fa;
+            --accent-hover: #93c5fd;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e6f7ff 0%, #d0edff 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
-            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-            border: 1px solid #e0e7ff;
-        }
-        .header {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+
+        /* Header mejorado */
+        .app-header {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 1.5rem 2rem;
             position: relative;
             overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-        .filters {
-            padding: 20px;
-            background: #f8f9fa;
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 2;
         }
-        .filter-btn {
-            background: white;
-            border: 2px solid #3b82f6;
-            color: #3b82f6;
-            padding: 8px 15px;
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .app-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .app-subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* Controles del tema */
+        .theme-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Loader moderno */
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--accent-primary);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        /* Contenido principal */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Filtros mejorados */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
             font-weight: 500;
             transition: all 0.3s ease;
         }
+
         .filter-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+            box-shadow: var(--shadow);
         }
+
         .filter-btn.active {
-            background: #3b82f6;
+            background: var(--accent-primary);
             color: white;
+            border-color: var(--accent-primary);
         }
+
+        /* Grid de productos */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            padding: 30px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
         }
+
+        /* Tarjetas de productos mejoradas */
         .product-card {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
             transition: all 0.3s ease;
-            border: 1px solid #e0e7ff;
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.6s forwards;
+            animation: fadeIn 0.6s ease forwards;
         }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-category {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: 1rem;
+        }
+
+        .product-stock {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .stock-available {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .stock-low {
+            background: rgba(251, 191, 36, 0.1);
+            color: #fbbf24;
+        }
+
+        .stock-out {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Last updated */
+        .last-updated {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Animaciones */
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .product-card:nth-child(1) { animation-delay: 0.1s; }
         .product-card:nth-child(2) { animation-delay: 0.2s; }
         .product-card:nth-child(3) { animation-delay: 0.3s; }
         .product-card:nth-child(4) { animation-delay: 0.4s; }
         .product-card:nth-child(5) { animation-delay: 0.5s; }
         .product-card:nth-child(6) { animation-delay: 0.6s; }
-        
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-        .product-name {
-            font-size: 1.2em;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .product-category {
-            color: #7f8c8d;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-        }
-        .product-price {
-            font-size: 1.5em;
-            font-weight: 700;
-            color: #3b82f6;
-            margin-bottom: 10px;
-        }
-        .product-stock {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 500;
-        }
-        .stock-available {
-            background: #d4edda;
-            color: #155724;
-        }
-        .stock-low {
-            background: #fff3cd;
-            color: #856404;
-        }
-        .stock-out {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        .last-updated {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 0.9em;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 50px;
-            grid-column: 1 / -1;
-        }
-        .empty-state h3 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .loading {
-            text-align: center;
-            padding: 50px;
-            grid-column: 1 / -1;
-        }
+
+        /* Responsive */
         @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .theme-controls {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-container {
+                padding: 0 1rem;
+            }
+            
+            .filters {
+                justify-content: center;
+            }
+            
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                padding: 20px;
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🍽️ Cafetería Escolar</h1>
-            <p>Menú Disponible Hoy</p>
+    <!-- Loader -->
+    <div class="loader-container" id="loader">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="logo-container">
+                <div class="logo-icon">🍽️</div>
+                <div>
+                    <h1 class="app-title">Menú Cafetería</h1>
+                    <p class="app-subtitle">Productos Disponibles Hoy</p>
+                </div>
+            </div>
+            <div class="theme-controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <span id="themeIcon">🌙</span>
+                    <span id="themeText">Modo Oscuro</span>
+                </button>
+            </div>
         </div>
-        
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="main-container">
+        <!-- Filtros -->
         <div class="filters">
             <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
             <button class="filter-btn" onclick="filterProducts('media_mañana')">🌅 Media Mañana</button>
             <button class="filter-btn" onclick="filterProducts('merienda')">🍪 Merienda</button>
         </div>
-        
+
+        <!-- Grid de productos -->
         <div class="products-grid" id="productsContainer">
-            <div class="loading">
-                <p>🔄 Cargando productos...</p>
+            <div class="empty-state">
+                <div class="empty-icon">🔄</div>
+                <p>Cargando productos...</p>
             </div>
         </div>
-        
+
+        <!-- Última actualización -->
         <div class="last-updated" id="lastUpdated">
             Última actualización: Cargando...
         </div>
-    </div>
+    </main>
 
     <script>
         // Configuración de Firebase
@@ -225,13 +400,67 @@
         let allProducts = {};
         let currentFilter = 'all';
 
-        // Escuchar cambios en tiempo real
-        productsRef.on('value', (snapshot) => {
-            allProducts = snapshot.val() || {};
-            filterProducts(currentFilter);
-            updateLastUpdated();
-        });
+        // Detectar tema del sistema
+        function detectSystemTheme() {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                return 'dark';
+            }
+            return 'light';
+        }
 
+        // Aplicar tema
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.body.classList.add('dark-mode');
+                document.getElementById('themeIcon').textContent = '☀️';
+                document.getElementById('themeText').textContent = 'Modo Claro';
+            } else {
+                document.body.classList.remove('dark-mode');
+                document.getElementById('themeIcon').textContent = '🌙';
+                document.getElementById('themeText').textContent = 'Modo Oscuro';
+            }
+            localStorage.setItem('theme', theme);
+        }
+
+        // Toggle tema
+        function toggleTheme() {
+            const currentTheme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
+        }
+
+        // Inicializar tema
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else {
+                const systemTheme = detectSystemTheme();
+                applyTheme(systemTheme);
+            }
+        }
+
+        // Funciones de utilidad
+        function getStockClass(quantity) {
+            if (quantity === 0) return 'stock-out';
+            if (quantity <= 5) return 'stock-low';
+            return 'stock-available';
+        }
+
+        function getStockText(quantity) {
+            if (quantity === 0) return '❌ Agotado';
+            if (quantity <= 5) return `⚠️ Solo ${quantity} disponibles`;
+            return `✅ ${quantity} disponibles`;
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('es-CO', {
+                style: 'currency',
+                currency: 'COP'
+            }).format(amount);
+        }
+
+        // Filtrar productos
         function filterProducts(category) {
             currentFilter = category;
             
@@ -246,8 +475,8 @@
             if (!allProducts || Object.keys(allProducts).length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <h3>📭 No hay productos disponibles</h3>
-                        <p>Vuelve más tarde para ver nuestro menú</p>
+                        <div class="empty-icon">📭</div>
+                        <p>No hay productos disponibles</p>
                     </div>
                 `;
                 return;
@@ -267,8 +496,8 @@
             if (Object.keys(filteredProducts).length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <h3>📭 No hay productos en esta jornada</h3>
-                        <p>Prueba con otra jornada</p>
+                        <div class="empty-icon">📭</div>
+                        <p>No hay productos en esta categoría</p>
                     </div>
                 `;
                 return;
@@ -279,9 +508,11 @@
                 const product = filteredProducts[key];
                 html += `
                     <div class="product-card">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-category">${getCategoryName(product.category)}</div>
-                        <div class="product-price">$${product.price.toLocaleString('es-CO')}</div>
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-category">
+                            ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
+                        </div>
+                        <div class="product-price">${formatCurrency(product.price)}</div>
                         <div class="product-stock ${getStockClass(product.quantity)}">
                             ${getStockText(product.quantity)}
                         </div>
@@ -292,26 +523,7 @@
             container.innerHTML = html;
         }
 
-        function getCategoryName(category) {
-            const categories = {
-                'media_mañana': '🌅 Media Mañana',
-                'merienda': '🍪 Merienda'
-            };
-            return categories[category] || category;
-        }
-
-        function getStockClass(quantity) {
-            if (quantity === 0) return 'stock-out';
-            if (quantity <= 5) return 'stock-low';
-            return 'stock-available';
-        }
-
-        function getStockText(quantity) {
-            if (quantity === 0) return '❌ Agotado';
-            if (quantity <= 5) return `⚠️ Solo ${quantity} disponibles`;
-            return `✅ ${quantity} disponibles`;
-        }
-
+        // Actualizar última actualización
         function updateLastUpdated() {
             const now = new Date();
             const options = { 
@@ -325,8 +537,27 @@
                 `Última actualización: ${now.toLocaleDateString('es-ES', options)}`;
         }
 
-        // Inicializar con todos los productos
-        filterProducts('all');
+        // Inicializar cuando la página cargue
+        window.addEventListener('load', () => {
+            // Ocultar loader después de un breve delay
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').style.visibility = 'hidden';
+            }, 800);
+            
+            // Inicializar tema
+            initTheme();
+            
+            // Event listeners
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Cargar productos en tiempo real
+            productsRef.on('value', (snapshot) => {
+                allProducts = snapshot.val() || {};
+                filterProducts(currentFilter);
+                updateLastUpdated();
+            });
+        });
     </script>
 </body>
 </html>
