@@ -8,6 +8,8 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- QuaggaJS para escaneo de códigos de barras -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
     <style>
         :root {
             /* Tema claro */
@@ -264,6 +266,10 @@
             transform: translateY(0);
         }
 
+        .btn-secondary {
+            background: linear-gradient(135deg, #6b7280, #4b5563);
+        }
+
         /* Tabla mejorada */
         .table-container {
             overflow-x: auto;
@@ -352,6 +358,83 @@
             opacity: 0.9;
         }
 
+        /* Scanner Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .close {
+            color: var(--text-secondary);
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--text-primary);
+        }
+
+        #scanner-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+        }
+
+        #scanner-container video {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 100px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+        }
+
+        .scanner-instructions {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+
+        .barcode-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .barcode-input-group .form-input {
+            flex: 1;
+        }
+
         /* Animaciones */
         @keyframes rotation {
             0% { transform: rotate(0deg); }
@@ -406,6 +489,11 @@
             
             .btn {
                 width: auto;
+            }
+            
+            .barcode-input-group {
+                flex-direction: row;
+                align-items: end;
             }
         }
 
@@ -471,6 +559,11 @@
         .mobile .form-select {
             padding: 0.5rem;
             font-size: 0.9rem;
+        }
+        
+        .mobile .modal-content {
+            margin: 10% auto;
+            width: 95%;
         }
         
         /* Optimizaciones específicas para pantallas muy pequeñas */
@@ -567,6 +660,15 @@
                 </div>
                 <form id="productForm">
                     <div class="form-group">
+                        <label class="form-label">Código de Barras</label>
+                        <div class="barcode-input-group">
+                            <input type="text" class="form-input" id="barcode" placeholder="Escanear o ingresar código">
+                            <button type="button" class="btn btn-secondary" onclick="openScanner()" style="width: auto; padding: 0.75rem 1rem;">
+                                📷 Escanear
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Nombre del Producto</label>
                         <input type="text" class="form-input" id="productName" placeholder="Ej: Empanada de Carne">
                     </div>
@@ -627,6 +729,23 @@
         </div>
     </main>
 
+    <!-- Scanner Modal -->
+    <div id="scannerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeScanner()">&times;</span>
+            <h3 style="margin-bottom: 20px; color: var(--text-primary);">📷 Escanear Código de Barras</h3>
+            <div id="scanner-container">
+                <div class="scanner-overlay"></div>
+            </div>
+            <p class="scanner-instructions">
+                Posiciona el código de barras dentro del rectángulo
+            </p>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="closeScanner()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Configuración de Firebase
         const firebaseConfig = {
@@ -646,6 +765,9 @@
 
         // Referencia a la colección de productos
         const productsRef = database.ref('products');
+
+        // Variables para el escáner
+        let isScanning = false;
 
         // Detectar tema del sistema
         function detectSystemTheme() {
@@ -741,6 +863,10 @@
                         font-size: 0.7rem !important;
                         padding: 0.1rem 0.5rem !important;
                     }
+                    .mobile .modal-content {
+                        margin: 10% auto !important;
+                        width: 95% !important;
+                    }
                 `;
                 document.head.appendChild(style);
             }
@@ -768,6 +894,77 @@
                 style: 'currency',
                 currency: 'COP'
             }).format(amount);
+        }
+
+        // Funciones para el escáner de códigos de barras
+        function openScanner() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('La cámara no está disponible en este dispositivo');
+                return;
+            }
+            
+            const modal = document.getElementById('scannerModal');
+            modal.style.display = 'block';
+            
+            setTimeout(() => {
+                initScanner();
+            }, 300);
+        }
+
+        function closeScanner() {
+            const modal = document.getElementById('scannerModal');
+            modal.style.display = 'none';
+            
+            if (typeof Quagga !== 'undefined') {
+                Quagga.stop();
+            }
+            
+            isScanning = false;
+        }
+
+        function initScanner() {
+            if (isScanning) return;
+            isScanning = true;
+            
+            Quagga.init({
+                inputStream: {
+                    name: "Live",
+                    type: "LiveStream",
+                    target: document.querySelector('#scanner-container'),
+                    constraints: {
+                        width: 400,
+                        height: 300,
+                        facingMode: "environment"
+                    }
+                },
+                decoder: {
+                    readers: [
+                        "code_128_reader",
+                        "ean_reader",
+                        "ean_8_reader",
+                        "code_39_reader",
+                        "code_39_vin_reader",
+                        "codabar_reader",
+                        "upc_reader",
+                        "upc_e_reader"
+                    ]
+                }
+            }, function(err) {
+                if (err) {
+                    console.error('Error initializing scanner:', err);
+                    alert('Error al inicializar el escáner: ' + err);
+                    closeScanner();
+                    return;
+                }
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function(data) {
+                const code = data.codeResult.code;
+                document.getElementById('barcode').value = code;
+                alert(`Código escaneado: ${code}`);
+                closeScanner();
+            });
         }
 
         // Actualizar estadísticas
@@ -814,15 +1011,12 @@
                         <td>
                             <strong>${product.name}</strong>
                             <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                                ${product.barcode ? '🔢 ' + product.barcode : ''}
                                 ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
                             </div>
                         </td>
                         <td>${formatCurrency(product.price)}</td>
-                        <td>
-                            <input type="number" value="${product.quantity}" 
-                                   onchange="updateProduct('${key}', this.value)" 
-                                   style="width: 70px; padding: 0.25rem; border: 1px solid var(--border-color); border-radius: 5px; background: var(--bg-secondary); color: var(--text-primary);">
-                        </td>
+                        <td>${product.quantity}</td>
                         <td>
                             <span class="status-badge ${getStatusClass(product.quantity)}">
                                 ${getStatusText(product.quantity)}
@@ -844,6 +1038,7 @@
         function addProduct(e) {
             e.preventDefault();
             
+            const barcode = document.getElementById('barcode').value.trim();
             const name = document.getElementById('productName').value.trim();
             const price = parseFloat(document.getElementById('price').value);
             const quantity = parseInt(document.getElementById('quantity').value);
@@ -861,13 +1056,20 @@
 
             // Agregar producto a Firebase
             const newProductRef = productsRef.push();
-            newProductRef.set({
+            const productData = {
                 name: name,
                 price: price,
                 quantity: quantity,
                 category: category,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
-            }).then(() => {
+            };
+            
+            // Agregar código de barras si existe
+            if (barcode) {
+                productData.barcode = barcode;
+            }
+
+            newProductRef.set(productData).then(() => {
                 // Limpiar formulario
                 document.getElementById('productForm').reset();
                 
@@ -964,6 +1166,14 @@
         window.addEventListener('orientationchange', () => {
             setTimeout(detectDeviceAndAdapt, 100); // Pequeño delay para que se actualice el tamaño
         });
+        
+        // Cerrar modal al hacer clic fuera
+        window.onclick = function(event) {
+            const modal = document.getElementById('scannerModal');
+            if (event.target == modal) {
+                closeScanner();
+            }
+        }
     </script>
 </body>
 </html>
