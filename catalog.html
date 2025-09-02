@@ -21,7 +21,7 @@
             --border-color: #e2e8f0;
             --accent-primary: #3b82f6;
             --accent-hover: #2563eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
@@ -35,8 +35,8 @@
             --border-color: #334155;
             --accent-primary: #60a5fa;
             --accent-hover: #93c5fd;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -55,24 +55,20 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header mejorado */
+        /* Header compacto */
         .app-header {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
             padding: 1rem;
-            position: relative;
-            overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
 
         .header-content {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: relative;
-            z-index: 2;
             padding: 0 1rem;
         }
 
@@ -84,17 +80,16 @@
 
         .logo-icon {
             font-size: 1.5rem;
-            animation: pulse 2s infinite;
         }
 
         .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.25px;
         }
 
         .app-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             font-weight: 400;
         }
@@ -107,22 +102,21 @@
         }
 
         .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         /* Loader moderno */
@@ -137,28 +131,28 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .loader {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--accent-primary);
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--accent-primary);
             border-bottom-color: transparent;
             border-radius: 50%;
             display: inline-block;
             box-sizing: border-box;
-            animation: rotation 1s linear infinite;
+            animation: rotation 0.8s linear infinite;
         }
 
         /* Contenido principal */
         .main-container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 1rem auto;
             padding: 0 1rem;
         }
 
-        /* Filtros mejorados */
+        /* Filtros compactos */
         .filters {
             display: flex;
             gap: 0.5rem;
@@ -174,13 +168,13 @@
             padding: 0.5rem 1rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .filter-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: var(--shadow);
         }
 
@@ -194,55 +188,55 @@
         .products-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
-        /* Tarjetas de productos mejoradas */
+        /* Tarjetas de productos compactas */
         .product-card {
             background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1.25rem;
+            border-radius: 12px;
+            padding: 1rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
+            transform: translateY(10px);
+            animation: fadeIn 0.3s ease forwards;
         }
 
         .product-card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
 
         .product-name {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .product-category {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.25rem;
         }
 
         .product-price {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
             color: var(--accent-primary);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .product-stock {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
         }
 
@@ -264,14 +258,14 @@
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem;
             color: var(--text-secondary);
             grid-column: 1 / -1;
         }
 
         .empty-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
             opacity: 0.5;
         }
 
@@ -280,7 +274,7 @@
             text-align: center;
             padding: 1rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         /* Animaciones */
@@ -289,40 +283,37 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .product-card:nth-child(1) { animation-delay: 0.1s; }
-        .product-card:nth-child(2) { animation-delay: 0.2s; }
-        .product-card:nth-child(3) { animation-delay: 0.3s; }
-        .product-card:nth-child(4) { animation-delay: 0.4s; }
-        .product-card:nth-child(5) { animation-delay: 0.5s; }
-        .product-card:nth-child(6) { animation-delay: 0.6s; }
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.1s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.2s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(6) { animation-delay: 0.3s; }
 
         /* Responsive */
+        @media (min-width: 640px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
         @media (min-width: 768px) {
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             }
             
             .app-title {
-                font-size: 1.8rem;
-            }
-            
-            .app-subtitle {
-                font-size: 1rem;
+                font-size: 1.35rem;
             }
             
             .theme-toggle {
-                padding: 0.5rem 1rem;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.8rem;
             }
             
             .filters {
@@ -343,15 +334,15 @@
         }
         
         .mobile .app-title {
-            font-size: 1.3rem;
+            font-size: 1.15rem;
         }
         
         .mobile .app-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         
         .mobile .theme-toggle {
-            padding: 0.25rem 0.5rem;
+            padding: 0.2rem 0.5rem;
             font-size: 0.7rem;
         }
         
@@ -370,29 +361,29 @@
         }
         
         .mobile .product-card {
-            padding: 1rem;
+            padding: 0.85rem;
         }
         
         .mobile .product-name {
-            font-size: 1.1rem;
+            font-size: 0.95rem;
         }
         
         .mobile .product-price {
-            font-size: 1.3rem;
+            font-size: 1.15rem;
         }
         
         /* Optimizaciones específicas para pantallas muy pequeñas */
         .small-screen .product-name {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         
         .small-screen .product-price {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
         .small-screen .product-stock {
             font-size: 0.7rem;
-            padding: 0.1rem 0.5rem;
+            padding: 0.1rem 0.4rem;
         }
         
         /* iPhone específicos */
@@ -400,14 +391,14 @@
             padding-top: env(safe-area-inset-top);
         }
         
-        /* Desktop (mantener los estilos originales) */
+        /* Desktop */
         @media (min-width: 768px) {
             .desktop .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             }
             
             .desktop .app-title {
-                font-size: 1.8rem;
+                font-size: 1.35rem;
             }
             
             .desktop .header-content {
@@ -416,8 +407,8 @@
             }
             
             .desktop .theme-toggle {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -441,7 +432,7 @@
             <div class="theme-controls">
                 <button class="theme-toggle" id="themeToggle">
                     <span id="themeIcon">🌙</span>
-                    <span id="themeText">Modo Oscuro</span>
+                    <span id="themeText">Oscuro</span>
                 </button>
             </div>
         </div>
@@ -452,7 +443,7 @@
         <!-- Filtros -->
         <div class="filters">
             <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-            <button class="filter-btn" onclick="filterProducts('media_mañana')">🌅 Media Mañana</button>
+            <button class="filter-btn" onclick="filterProducts('media_mañana')">🌅 Mañana</button>
             <button class="filter-btn" onclick="filterProducts('merienda')">🍪 Merienda</button>
         </div>
 
@@ -505,11 +496,11 @@
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeIcon').textContent = '☀️';
-                document.getElementById('themeText').textContent = 'Modo Claro';
+                document.getElementById('themeText').textContent = 'Claro';
             } else {
                 document.body.classList.remove('dark-mode');
                 document.getElementById('themeIcon').textContent = '🌙';
-                document.getElementById('themeText').textContent = 'Modo Oscuro';
+                document.getElementById('themeText').textContent = 'Oscuro';
             }
             localStorage.setItem('theme', theme);
         }
@@ -570,13 +561,13 @@
                 const style = document.createElement('style');
                 style.textContent = `
                     .mobile .product-card {
-                        padding: 1rem !important;
+                        padding: 0.85rem !important;
                     }
                     .mobile .product-name {
-                        font-size: 1.1rem !important;
+                        font-size: 0.95rem !important;
                     }
                     .mobile .product-price {
-                        font-size: 1.3rem !important;
+                        font-size: 1.15rem !important;
                     }
                     .mobile .filter-btn {
                         padding: 0.25rem 0.75rem !important;
@@ -600,7 +591,7 @@
 
         function getStockText(quantity) {
             if (quantity === 0) return '❌ Agotado';
-            if (quantity <= 5) return `⚠️ Solo ${quantity} disponibles`;
+            if (quantity <= 5) return `⚠️ ${quantity} disponibles`;
             return `✅ ${quantity} disponibles`;
         }
 
@@ -661,7 +652,7 @@
                     <div class="product-card">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-category">
-                            ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
+                            ${product.category === 'media_mañana' ? '🌅 Mañana' : '🍪 Merienda'}
                         </div>
                         <div class="product-price">${formatCurrency(product.price)}</div>
                         <div class="product-stock ${getStockClass(product.quantity)}">
@@ -679,13 +670,13 @@
             const now = new Date();
             const options = { 
                 year: 'numeric', 
-                month: 'long', 
+                month: 'short', 
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
             };
             document.getElementById('lastUpdated').textContent = 
-                `Última actualización: ${now.toLocaleDateString('es-ES', options)}`;
+                `Actualizado: ${now.toLocaleDateString('es-ES', options)}`;
         }
 
         // Inicializar cuando la página cargue
@@ -694,7 +685,7 @@
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 document.getElementById('loader').style.visibility = 'hidden';
-            }, 800);
+            }, 500);
             
             // Inicializar tema
             initTheme();
