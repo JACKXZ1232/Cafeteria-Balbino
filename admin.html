@@ -772,3 +772,21 @@
                 document.getElementById('loader').style.opacity = '0';
                 document.getElementById('loader').style.visibility = 'hidden';
             }, 800);
+            
+            // Inicializar tema
+            initTheme();
+            
+            // Event listeners
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            document.getElementById('productForm').addEventListener('submit', addProduct);
+            
+            // Cargar productos en tiempo real
+            productsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                updateInventoryTable(data);
+                updateStats(data);
+            });
+        });
+    </script>
+</body>
+</html>
