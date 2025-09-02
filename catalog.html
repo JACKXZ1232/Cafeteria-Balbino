@@ -2,11 +2,11 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo - Cafetería Escolar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3b82f6">
+    <title>Menú Cafetería - Cafetería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3b82f6">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -51,47 +51,50 @@
             color: var(--text-primary);
             min-height: 100vh;
             transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header mejorado */
         .app-header {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
-            padding: 1.5rem 2rem;
+            padding: 1rem;
             position: relative;
             overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
 
         .header-content {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
             position: relative;
             z-index: 2;
+            padding: 0 1rem;
         }
 
         .logo-container {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .logo-icon {
-            font-size: 2rem;
+            font-size: 1.5rem;
             animation: pulse 2s infinite;
         }
 
         .app-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.5px;
         }
 
         .app-subtitle {
-            font-size: 1rem;
+            font-size: 0.9rem;
             opacity: 0.9;
             font-weight: 400;
         }
@@ -99,7 +102,7 @@
         /* Controles del tema */
         .theme-controls {
             display: flex;
-            gap: 1rem;
+            gap: 0.5rem;
             align-items: center;
         }
 
@@ -107,13 +110,13 @@
             background: rgba(255, 255, 255, 0.2);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: 0.5rem 1rem;
+            padding: 0.25rem 0.75rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.25rem;
             transition: all 0.3s ease;
         }
 
@@ -150,17 +153,18 @@
 
         /* Contenido principal */
         .main-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 2rem;
+            max-width: 100%;
+            margin: 1rem auto;
+            padding: 0 1rem;
         }
 
         /* Filtros mejorados */
         .filters {
             display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
             flex-wrap: wrap;
+            justify-content: center;
         }
 
         .filter-btn {
@@ -189,15 +193,15 @@
         /* Grid de productos */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1rem;
         }
 
         /* Tarjetas de productos mejoradas */
         .product-card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -260,13 +264,13 @@
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 2rem 1rem;
             color: var(--text-secondary);
             grid-column: 1 / -1;
         }
 
         .empty-icon {
-            font-size: 3rem;
+            font-size: 2rem;
             margin-bottom: 1rem;
             opacity: 0.5;
         }
@@ -274,7 +278,7 @@
         /* Last updated */
         .last-updated {
             text-align: center;
-            padding: 2rem;
+            padding: 1rem;
             color: var(--text-secondary);
             font-size: 0.9rem;
         }
@@ -304,28 +308,116 @@
         .product-card:nth-child(6) { animation-delay: 0.6s; }
 
         /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             }
             
-            .theme-controls {
-                width: 100%;
-                justify-content: center;
+            .app-title {
+                font-size: 1.8rem;
             }
             
-            .main-container {
-                padding: 0 1rem;
+            .app-subtitle {
+                font-size: 1rem;
+            }
+            
+            .theme-toggle {
+                padding: 0.5rem 1rem;
             }
             
             .filters {
                 justify-content: center;
             }
+        }
+
+        /* Estilos específicos para móviles */
+        .mobile {
+            font-size: 14px;
+        }
+        
+        .mobile .header-content {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .mobile .app-title {
+            font-size: 1.3rem;
+        }
+        
+        .mobile .app-subtitle {
+            font-size: 0.8rem;
+        }
+        
+        .mobile .theme-toggle {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+        
+        .mobile .main-container {
+            padding: 0.5rem;
+            margin: 0.5rem auto;
+        }
+        
+        .mobile .filters {
+            gap: 0.25rem;
+        }
+        
+        .mobile .filter-btn {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+        }
+        
+        .mobile .product-card {
+            padding: 1rem;
+        }
+        
+        .mobile .product-name {
+            font-size: 1.1rem;
+        }
+        
+        .mobile .product-price {
+            font-size: 1.3rem;
+        }
+        
+        /* Optimizaciones específicas para pantallas muy pequeñas */
+        .small-screen .product-name {
+            font-size: 1rem;
+        }
+        
+        .small-screen .product-price {
+            font-size: 1.2rem;
+        }
+        
+        .small-screen .product-stock {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.5rem;
+        }
+        
+        /* iPhone específicos */
+        .iphone .header-content {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        /* Desktop (mantener los estilos originales) */
+        @media (min-width: 768px) {
+            .desktop .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            }
             
-            .products-grid {
-                grid-template-columns: 1fr;
+            .desktop .app-title {
+                font-size: 1.8rem;
+            }
+            
+            .desktop .header-content {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .desktop .theme-toggle {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -440,6 +532,65 @@
             }
         }
 
+        // Detectar tipo de dispositivo y adaptar la interfaz
+        function detectDeviceAndAdapt() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            
+            // Detectar si es móvil
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+            
+            // Detectar si es iPhone específico
+            const isiPhone = /iphone|ipod/i.test(userAgent);
+            const isAndroid = /android/i.test(userAgent);
+            
+            // Detectar tamaños específicos
+            const isSmallScreen = screenWidth <= 414; // iPhone XR, 12, etc.
+            const isLargeScreen = screenWidth > 1024; // Desktop
+            
+            // Agregar clases CSS según el dispositivo
+            document.body.classList.remove('mobile', 'desktop', 'iphone', 'android', 'small-screen');
+            
+            if (isMobile) {
+                document.body.classList.add('mobile');
+                if (isiPhone) document.body.classList.add('iphone');
+                if (isAndroid) document.body.classList.add('android');
+                if (isSmallScreen) document.body.classList.add('small-screen');
+            } else {
+                document.body.classList.add('desktop');
+            }
+            
+            // Optimizaciones específicas para móviles pequeños
+            if (isSmallScreen) {
+                // Ajustar tamaños de fuente
+                document.documentElement.style.fontSize = '14px';
+                
+                // Ajustar padding y márgenes
+                const style = document.createElement('style');
+                style.textContent = `
+                    .mobile .product-card {
+                        padding: 1rem !important;
+                    }
+                    .mobile .product-name {
+                        font-size: 1.1rem !important;
+                    }
+                    .mobile .product-price {
+                        font-size: 1.3rem !important;
+                    }
+                    .mobile .filter-btn {
+                        padding: 0.25rem 0.75rem !important;
+                        font-size: 0.8rem !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            console.log(`Dispositivo detectado: ${isMobile ? 'Móvil' : 'Desktop'}`);
+            console.log(`Tipo: ${isiPhone ? 'iPhone' : isAndroid ? 'Android' : 'Otro'}`);
+            console.log(`Tamaño: ${screenWidth}x${screenHeight}`);
+        }
+
         // Funciones de utilidad
         function getStockClass(quantity) {
             if (quantity === 0) return 'stock-out';
@@ -548,6 +699,9 @@
             // Inicializar tema
             initTheme();
             
+            // Detectar dispositivo y adaptar
+            detectDeviceAndAdapt();
+            
             // Event listeners
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             
@@ -557,6 +711,14 @@
                 filterProducts(currentFilter);
                 updateLastUpdated();
             });
+        });
+        
+        // También ejecutar cuando se redimensiona la ventana
+        window.addEventListener('resize', detectDeviceAndAdapt);
+        
+        // Para dispositivos con orientación que cambia
+        window.addEventListener('orientationchange', () => {
+            setTimeout(detectDeviceAndAdapt, 100); // Pequeño delay para que se actualice el tamaño
         });
     </script>
 </body>
