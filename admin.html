@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3b82f6">
     <title>Panel Admin - Cafetería Escolar</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -48,6 +49,8 @@
             color: var(--text-primary);
             min-height: 100vh;
             transition: background-color 0.3s ease, color 0.3s ease;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Header mejorado */
@@ -248,6 +251,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            width: 100%;
+            justify-content: center;
         }
 
         .btn:hover {
@@ -397,6 +402,112 @@
             
             .theme-toggle {
                 padding: 0.5rem 1rem;
+            }
+            
+            .btn {
+                width: auto;
+            }
+        }
+
+        /* Estilos específicos para móviles */
+        .mobile {
+            font-size: 14px;
+        }
+        
+        .mobile .header-content {
+            flex-direction: column;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 0.5rem;
+        }
+        
+        .mobile .app-title {
+            font-size: 1.3rem;
+        }
+        
+        .mobile .app-subtitle {
+            font-size: 0.8rem;
+        }
+        
+        .mobile .theme-toggle {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+        }
+        
+        .mobile .main-container {
+            padding: 0.5rem;
+            margin: 0.5rem auto;
+        }
+        
+        .mobile .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .mobile .stat-card {
+            padding: 0.75rem;
+        }
+        
+        .mobile .stat-number {
+            font-size: 1.2rem;
+        }
+        
+        .mobile .dashboard-grid {
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .mobile .card-header {
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .mobile .card-title {
+            font-size: 1.1rem;
+        }
+        
+        .mobile .form-input, 
+        .mobile .form-select {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        /* Optimizaciones específicas para pantallas muy pequeñas */
+        .small-screen .inventory-table th,
+        .small-screen .inventory-table td {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .small-screen .status-badge {
+            font-size: 0.7rem;
+            padding: 0.1rem 0.4rem;
+        }
+        
+        /* iPhone específicos */
+        .iphone .header-content {
+            padding-top: env(safe-area-inset-top);
+        }
+        
+        /* Desktop (mantener los estilos originales) */
+        @media (min-width: 768px) {
+            .desktop .dashboard-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .desktop .app-title {
+                font-size: 1.8rem;
+            }
+            
+            .desktop .header-content {
+                flex-direction: row;
+                text-align: left;
+            }
+            
+            .desktop .theme-toggle {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -574,6 +685,69 @@
                 const systemTheme = detectSystemTheme();
                 applyTheme(systemTheme);
             }
+        }
+
+        // Detectar tipo de dispositivo y adaptar la interfaz
+        function detectDeviceAndAdapt() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const screenWidth = window.screen.width;
+            const screenHeight = window.screen.height;
+            
+            // Detectar si es móvil
+            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+            
+            // Detectar si es iPhone específico
+            const isiPhone = /iphone|ipod/i.test(userAgent);
+            const isAndroid = /android/i.test(userAgent);
+            
+            // Detectar tamaños específicos
+            const isSmallScreen = screenWidth <= 414; // iPhone XR, 12, etc.
+            const isLargeScreen = screenWidth > 1024; // Desktop
+            
+            // Agregar clases CSS según el dispositivo
+            document.body.classList.remove('mobile', 'desktop', 'iphone', 'android', 'small-screen');
+            
+            if (isMobile) {
+                document.body.classList.add('mobile');
+                if (isiPhone) document.body.classList.add('iphone');
+                if (isAndroid) document.body.classList.add('android');
+                if (isSmallScreen) document.body.classList.add('small-screen');
+            } else {
+                document.body.classList.add('desktop');
+            }
+            
+            // Optimizaciones específicas para móviles pequeños
+            if (isSmallScreen) {
+                // Ajustar tamaños de fuente
+                document.documentElement.style.fontSize = '14px';
+                
+                // Ajustar padding y márgenes
+                const style = document.createElement('style');
+                style.textContent = `
+                    .mobile .card {
+                        padding: 1rem !important;
+                    }
+                    .mobile .form-group {
+                        margin-bottom: 0.75rem !important;
+                    }
+                    .mobile .btn {
+                        padding: 0.5rem 1rem !important;
+                        font-size: 0.9rem !important;
+                    }
+                    .mobile .inventory-table td {
+                        padding: 0.5rem !important;
+                    }
+                    .mobile .status-badge {
+                        font-size: 0.7rem !important;
+                        padding: 0.1rem 0.5rem !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            console.log(`Dispositivo detectado: ${isMobile ? 'Móvil' : 'Desktop'}`);
+            console.log(`Tipo: ${isiPhone ? 'iPhone' : isAndroid ? 'Android' : 'Otro'}`);
+            console.log(`Tamaño: ${screenWidth}x${screenHeight}`);
         }
 
         // Funciones de utilidad
@@ -768,6 +942,9 @@
             // Inicializar tema
             initTheme();
             
+            // Detectar dispositivo y adaptar
+            detectDeviceAndAdapt();
+            
             // Event listeners
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
             document.getElementById('productForm').addEventListener('submit', addProduct);
@@ -778,6 +955,14 @@
                 updateInventoryTable(data);
                 updateStats(data);
             });
+        });
+        
+        // También ejecutar cuando se redimensiona la ventana
+        window.addEventListener('resize', detectDeviceAndAdapt);
+        
+        // Para dispositivos con orientación que cambia
+        window.addEventListener('orientationchange', () => {
+            setTimeout(detectDeviceAndAdapt, 100); // Pequeño delay para que se actualice el tamaño
         });
     </script>
 </body>
