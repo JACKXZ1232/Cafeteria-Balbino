@@ -21,7 +21,7 @@
             --border-color: #e2e8f0;
             --accent-primary: #3b82f6;
             --accent-hover: #2563eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
@@ -35,8 +35,8 @@
             --border-color: #334155;
             --accent-primary: #60a5fa;
             --accent-hover: #93c5fd;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -55,24 +55,20 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header mejorado */
+        /* Header compacto */
         .app-header {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
             padding: 1rem;
-            position: relative;
-            overflow: hidden;
             box-shadow: var(--shadow-lg);
         }
 
         .header-content {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: relative;
-            z-index: 2;
             padding: 0 1rem;
         }
 
@@ -84,17 +80,16 @@
 
         .logo-icon {
             font-size: 1.5rem;
-            animation: pulse 2s infinite;
         }
 
         .app-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            letter-spacing: -0.25px;
         }
 
         .app-subtitle {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             opacity: 0.9;
             font-weight: 400;
         }
@@ -107,22 +102,21 @@
         }
 
         .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             padding: 0.25rem 0.75rem;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.25);
         }
 
         /* Loader moderno */
@@ -137,23 +131,23 @@
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
 
         .loader {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--accent-primary);
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--accent-primary);
             border-bottom-color: transparent;
             border-radius: 50%;
             display: inline-block;
             box-sizing: border-box;
-            animation: rotation 1s linear infinite;
+            animation: rotation 0.8s linear infinite;
         }
 
         /* Contenido principal */
         .main-container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 1rem auto;
             padding: 0 1rem;
         }
@@ -165,19 +159,18 @@
             margin-bottom: 1rem;
         }
 
-        /* Tarjetas mejoradas */
+        /* Tarjetas compactas */
         .card {
             background: var(--bg-card);
-            border-radius: 16px;
+            border-radius: 12px;
             padding: 1.25rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-            height: fit-content;
+            transition: all 0.2s ease;
         }
 
         .card:hover {
-            transform: translateY(-4px);
+            transform: translateY(-2px);
             box-shadow: var(--shadow-lg);
         }
 
@@ -191,7 +184,7 @@
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--text-primary);
             display: flex;
@@ -200,18 +193,18 @@
         }
 
         .card-icon {
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        /* Formularios mejorados */
+        /* Formularios compactos */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -221,35 +214,36 @@
             margin-bottom: 0.5rem;
             font-weight: 500;
             color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         .form-input, .form-select {
             width: 100%;
-            padding: 0.75rem 1rem;
+            padding: 0.65rem 0.85rem;
             border: 1px solid var(--border-color);
-            border-radius: 10px;
+            border-radius: 8px;
             background: var(--bg-secondary);
             color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
         }
 
         .form-input:focus, .form-select:focus {
             outline: none;
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
         }
 
         .btn {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            font-size: 1rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -258,8 +252,8 @@
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 10px -2px rgba(59, 130, 246, 0.25);
         }
 
         .btn:active {
@@ -270,7 +264,7 @@
             background: linear-gradient(135deg, #6b7280, #4b5563);
         }
 
-        /* Tabla mejorada */
+        /* Tabla compacta */
         .table-container {
             overflow-x: auto;
         }
@@ -286,16 +280,17 @@
             color: var(--text-secondary);
             font-weight: 600;
             text-align: left;
-            padding: 1rem;
-            font-size: 0.9rem;
+            padding: 0.75rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.25px;
         }
 
         .inventory-table td {
-            padding: 1rem;
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
+            font-size: 0.9rem;
         }
 
         .inventory-table tr:last-child td {
@@ -303,14 +298,14 @@
         }
 
         .inventory-table tr:hover {
-            background: rgba(59, 130, 246, 0.05);
+            background: rgba(59, 130, 246, 0.03);
         }
 
         /* Estados mejorados */
         .status-badge {
-            padding: 0.25rem 0.75rem;
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 500;
             display: inline-block;
         }
@@ -330,31 +325,31 @@
             color: #ef4444;
         }
 
-        /* Estadísticas */
+        /* Estadísticas compactas */
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
             margin-bottom: 1rem;
         }
 
         .stat-card {
             background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
             color: white;
-            padding: 1rem;
-            border-radius: 12px;
+            padding: 0.85rem;
+            border-radius: 10px;
             text-align: center;
             box-shadow: var(--shadow);
         }
 
         .stat-number {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             opacity: 0.9;
         }
 
@@ -367,27 +362,29 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0,0,0,0.75);
         }
 
         .modal-content {
             background-color: var(--bg-card);
             margin: 5% auto;
-            padding: 20px;
-            border-radius: 15px;
+            padding: 1.5rem;
+            border-radius: 12px;
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
             position: relative;
             border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         }
 
         .close {
             color: var(--text-secondary);
             float: right;
-            font-size: 28px;
+            font-size: 1.5rem;
             font-weight: bold;
             cursor: pointer;
             line-height: 1;
+            padding: 0.25rem;
         }
 
         .close:hover {
@@ -396,14 +393,14 @@
 
         #scanner-container {
             width: 100%;
-            max-width: 400px;
-            margin: 20px auto;
+            max-width: 350px;
+            margin: 1rem auto;
             position: relative;
         }
 
         #scanner-container video {
             width: 100%;
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         .scanner-overlay {
@@ -411,23 +408,23 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 200px;
-            height: 100px;
+            width: 180px;
+            height: 90px;
             border: 2px solid var(--accent-primary);
-            border-radius: 10px;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
         }
 
         .scanner-instructions {
             text-align: center;
             color: var(--text-secondary);
-            margin-top: 15px;
-            font-size: 0.9rem;
+            margin-top: 1rem;
+            font-size: 0.85rem;
         }
 
         .barcode-input-group {
             display: flex;
-            gap: 10px;
+            gap: 0.5rem;
             align-items: end;
         }
 
@@ -441,31 +438,25 @@
             100% { transform: rotate(360deg); }
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .fade-in {
-            animation: fadeIn 0.6s ease forwards;
+            animation: fadeIn 0.3s ease forwards;
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 2rem 1rem;
+            padding: 1.5rem;
             color: var(--text-secondary);
         }
 
         .empty-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
             opacity: 0.5;
         }
 
@@ -476,15 +467,12 @@
             }
             
             .app-title {
-                font-size: 1.8rem;
-            }
-            
-            .app-subtitle {
-                font-size: 1rem;
+                font-size: 1.35rem;
             }
             
             .theme-toggle {
-                padding: 0.5rem 1rem;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.8rem;
             }
             
             .btn {
@@ -510,15 +498,15 @@
         }
         
         .mobile .app-title {
-            font-size: 1.3rem;
+            font-size: 1.15rem;
         }
         
         .mobile .app-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         
         .mobile .theme-toggle {
-            padding: 0.25rem 0.5rem;
+            padding: 0.2rem 0.5rem;
             font-size: 0.7rem;
         }
         
@@ -534,11 +522,11 @@
         }
         
         .mobile .stat-card {
-            padding: 0.75rem;
+            padding: 0.7rem;
         }
         
         .mobile .stat-number {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
         }
         
         .mobile .dashboard-grid {
@@ -552,7 +540,7 @@
         }
         
         .mobile .card-title {
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .mobile .form-input, 
@@ -564,6 +552,7 @@
         .mobile .modal-content {
             margin: 10% auto;
             width: 95%;
+            padding: 1rem;
         }
         
         /* Optimizaciones específicas para pantallas muy pequeñas */
@@ -574,7 +563,7 @@
         }
         
         .small-screen .status-badge {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 0.1rem 0.4rem;
         }
         
@@ -583,14 +572,14 @@
             padding-top: env(safe-area-inset-top);
         }
         
-        /* Desktop (mantener los estilos originales) */
+        /* Desktop */
         @media (min-width: 768px) {
             .desktop .dashboard-grid {
                 grid-template-columns: 1fr 1fr;
             }
             
             .desktop .app-title {
-                font-size: 1.8rem;
+                font-size: 1.35rem;
             }
             
             .desktop .header-content {
@@ -599,8 +588,8 @@
             }
             
             .desktop .theme-toggle {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
+                padding: 0.35rem 0.85rem;
+                font-size: 0.8rem;
             }
         }
     </style>
@@ -624,7 +613,7 @@
             <div class="theme-controls">
                 <button class="theme-toggle" id="themeToggle">
                     <span id="themeIcon">🌙</span>
-                    <span id="themeText">Modo Oscuro</span>
+                    <span id="themeText">Oscuro</span>
                 </button>
             </div>
         </div>
@@ -662,15 +651,15 @@
                     <div class="form-group">
                         <label class="form-label">Código de Barras</label>
                         <div class="barcode-input-group">
-                            <input type="text" class="form-input" id="barcode" placeholder="Escanear o ingresar código">
-                            <button type="button" class="btn btn-secondary" onclick="openScanner()" style="width: auto; padding: 0.75rem 1rem;">
-                                📷 Escanear
+                            <input type="text" class="form-input" id="barcode" placeholder="Código de barras">
+                            <button type="button" class="btn btn-secondary" onclick="openScanner()" style="width: auto; padding: 0.65rem 0.85rem;">
+                                📷
                             </button>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Nombre del Producto</label>
-                        <input type="text" class="form-input" id="productName" placeholder="Ej: Empanada de Carne">
+                        <input type="text" class="form-input" id="productName" placeholder="Nombre del producto">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Precio (COP)</label>
@@ -733,15 +722,15 @@
     <div id="scannerModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeScanner()">&times;</span>
-            <h3 style="margin-bottom: 20px; color: var(--text-primary);">📷 Escanear Código de Barras</h3>
+            <h3 style="margin-bottom: 1rem; color: var(--text-primary); font-size: 1.1rem;">📷 Escanear Código de Barras</h3>
             <div id="scanner-container">
                 <div class="scanner-overlay"></div>
             </div>
             <p class="scanner-instructions">
-                Posiciona el código de barras dentro del rectángulo
+                Posicione el código de barras dentro del rectángulo
             </p>
-            <div style="text-align: center; margin-top: 20px;">
-                <button class="btn btn-secondary" onclick="closeScanner()">Cancelar</button>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="closeScanner()" style="width: auto;">Cancelar</button>
             </div>
         </div>
     </div>
@@ -782,11 +771,11 @@
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeIcon').textContent = '☀️';
-                document.getElementById('themeText').textContent = 'Modo Claro';
+                document.getElementById('themeText').textContent = 'Claro';
             } else {
                 document.body.classList.remove('dark-mode');
                 document.getElementById('themeIcon').textContent = '🌙';
-                document.getElementById('themeText').textContent = 'Modo Oscuro';
+                document.getElementById('themeText').textContent = 'Oscuro';
             }
             localStorage.setItem('theme', theme);
         }
@@ -866,6 +855,7 @@
                     .mobile .modal-content {
                         margin: 10% auto !important;
                         width: 95% !important;
+                        padding: 1rem !important;
                     }
                 `;
                 document.head.appendChild(style);
@@ -1010,9 +1000,9 @@
                     <tr>
                         <td>
                             <strong>${product.name}</strong>
-                            <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                            <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                 ${product.barcode ? '🔢 ' + product.barcode : ''}
-                                ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
+                                ${product.category === 'media_mañana' ? '🌅 Mañana' : '🍪 Merienda'}
                             </div>
                         </td>
                         <td>${formatCurrency(product.price)}</td>
@@ -1024,7 +1014,7 @@
                         </td>
                         <td>
                             <button onclick="deleteProduct('${key}')" 
-                                    style="background: #ef4444; color: white; border: none; padding: 0.25rem 0.5rem; border-radius: 5px; cursor: pointer; font-size: 0.9rem;">
+                                    style="background: #ef4444; color: white; border: none; padding: 0.2rem 0.4rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">
                                 🗑️
                             </button>
                         </td>
@@ -1076,10 +1066,10 @@
                 // Feedback visual
                 const button = document.querySelector('.btn');
                 const originalText = button.innerHTML;
-                button.innerHTML = '✅ Producto Agregado';
+                button.innerHTML = '✅ Agregado';
                 setTimeout(() => {
                     button.innerHTML = originalText;
-                }, 2000);
+                }, 1500);
             }).catch((error) => {
                 console.error('Error al agregar producto:', error);
                 alert('Error al agregar producto');
@@ -1100,10 +1090,10 @@
                 const button = document.querySelector('.btn');
                 const originalText = button ? button.innerHTML : '';
                 if (button) {
-                    button.innerHTML = '✅ Producto Actualizado';
+                    button.innerHTML = '✅ Actualizado';
                     setTimeout(() => {
                         button.innerHTML = originalText;
-                    }, 2000);
+                    }, 1500);
                 }
             }).catch((error) => {
                 console.error('Error al actualizar producto:', error);
@@ -1113,17 +1103,17 @@
 
         // Eliminar producto
         function deleteProduct(key) {
-            if (confirm('¿Estás seguro de eliminar este producto?')) {
+            if (confirm('¿Eliminar este producto?')) {
                 productsRef.child(key).remove()
                     .then(() => {
                         // Feedback visual
                         const button = document.querySelector('.btn');
                         const originalText = button ? button.innerHTML : '';
                         if (button) {
-                            button.innerHTML = '✅ Producto Eliminado';
+                            button.innerHTML = '✅ Eliminado';
                             setTimeout(() => {
                                 button.innerHTML = originalText;
-                            }, 2000);
+                            }, 1500);
                         }
                     })
                     .catch((error) => {
@@ -1139,7 +1129,7 @@
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 document.getElementById('loader').style.visibility = 'hidden';
-            }, 800);
+            }, 500);
             
             // Inicializar tema
             initTheme();
