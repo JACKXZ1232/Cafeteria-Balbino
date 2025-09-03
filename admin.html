@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Admin - Cafetería Escolar</title>
+    <title>Panel Admin - Papelería Escolar</title>
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -531,10 +531,10 @@
     <header class="app-header">
         <div class="header-content">
             <div class="logo-container">
-                <div class="logo-icon">🍽️</div>
+                <div class="logo-icon">✏️</div>
                 <div>
                     <h1 class="app-title">Panel de Administración</h1>
-                    <p class="app-subtitle">Cafetería Escolar</p>
+                    <p class="app-subtitle">Papelería Escolar</p>
                 </div>
             </div>
             <div class="theme-controls">
@@ -586,7 +586,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Nombre del Producto</label>
-                        <input type="text" class="form-input" id="productName" placeholder="Ej: Empanada de Carne">
+                        <input type="text" class="form-input" id="productName" placeholder="Ej: Cuaderno Rayado">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Precio (COP)</label>
@@ -600,11 +600,11 @@
                         <label class="form-label">Categoría</label>
                         <select class="form-select" id="category">
                             <option value="">Seleccionar categoría</option>
-                            <option value="bebidas">Bebidas</option>
-                            <option value="helados">Helados</option>
-                            <option value="snacks">Snacks</option>
-                            <option value="dulces">Dulces</option>
-                            <option value="comidas">Comidas (Empanadas, Hamburguesas)</option>
+                            <option value="cuadernos">Cuadernos</option>
+                            <option value="lapices">Lápices y Bolígrafos</option>
+                            <option value="papeleria">Papelería</option>
+                            <option value="utiles">Útiles Escolares</option>
+                            <option value="colores">Colores y Marcadores</option>
                         </select>
                     </div>
                     <button type="submit" class="btn">
@@ -666,7 +666,7 @@
     </div>
 
     <script>
-        // Configuración de Firebase (corregida)
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAiDgpN9_nKneeYQ9vW41aBxwo3VWZnBN0",
             authDomain: "cafeteria-escolar.firebaseapp.com",
@@ -893,11 +893,11 @@
         // Obtener nombre de categoría
         function getCategoryName(category) {
             const categories = {
-                'bebidas': '🥤 Bebidas',
-                'helados': '🍦 Helados',
-                'snacks': '🍿 Snacks',
-                'dulces': '🍬 Dulces',
-                'comidas': '🍔 Comidas'
+                'cuadernos': '📘 Cuadernos',
+                'lapices': '✏️ Lápices/Bolígrafos',
+                'papeleria': '📎 Papelería',
+                'utiles': '📏 Útiles Escolares',
+                'colores': '🎨 Colores/Marcadores'
             };
             return categories[category] || category;
         }
