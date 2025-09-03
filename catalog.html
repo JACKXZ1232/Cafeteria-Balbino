@@ -2,27 +2,31 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#3b82f6">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú Cafetería - Cafetería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
         :root {
-            /* Tema claro */
+            /* Tema claro - Paleta profesional */
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
             --bg-card: #ffffff;
-            --text-primary: #1e293b;
+            --text-primary: #0f172a;
             --text-secondary: #64748b;
             --border-color: #e2e8f0;
             --accent-primary: #3b82f6;
-            --accent-hover: #2563eb;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --accent-secondary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
 
         .dark-mode {
@@ -34,9 +38,10 @@
             --text-secondary: #94a3b8;
             --border-color: #334155;
             --accent-primary: #60a5fa;
-            --accent-hover: #93c5fd;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+            --accent-secondary: #3b82f6;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -4px rgba(0, 0, 0, 0.2);
         }
 
         * {
@@ -50,17 +55,16 @@
             background-color: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
+            line-height: 1.5;
             transition: background-color 0.3s ease, color 0.3s ease;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Header compacto */
+        /* Header minimalista */
         .app-header {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-hover));
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
-            padding: 1rem;
-            box-shadow: var(--shadow-lg);
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
         }
 
         .header-content {
@@ -69,7 +73,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 1rem;
+            padding: 0 1.5rem;
         }
 
         .logo-container {
@@ -79,25 +83,26 @@
         }
 
         .logo-icon {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
         }
 
         .app-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            letter-spacing: -0.25px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
         .app-subtitle {
-            font-size: 0.8rem;
+            font-size: 0.875rem;
             opacity: 0.9;
             font-weight: 400;
+            margin-top: 0.125rem;
         }
 
         /* Controles del tema */
         .theme-controls {
             display: flex;
-            gap: 0.5rem;
+            gap: 0.75rem;
             align-items: center;
         }
 
@@ -105,18 +110,20 @@
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
             transition: all 0.2s ease;
+            font-weight: 500;
         }
 
         .theme-toggle:hover {
             background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
         }
 
         /* Loader moderno */
@@ -135,28 +142,28 @@
         }
 
         .loader {
-            width: 32px;
-            height: 32px;
+            width: 40px;
+            height: 40px;
             border: 3px solid var(--accent-primary);
             border-bottom-color: transparent;
             border-radius: 50%;
             display: inline-block;
             box-sizing: border-box;
-            animation: rotation 0.8s linear infinite;
+            animation: rotation 1s linear infinite;
         }
 
         /* Contenido principal */
         .main-container {
             max-width: 1200px;
-            margin: 1rem auto;
-            padding: 0 1rem;
+            margin: 1.5rem auto;
+            padding: 0 1.5rem;
         }
 
-        /* Filtros compactos */
+        /* Filtros con nuevas categorías */
         .filters {
             display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
             flex-wrap: wrap;
             justify-content: center;
         }
@@ -165,10 +172,10 @@
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-primary);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
             cursor: pointer;
-            font-size: 0.85rem;
+            font-size: 0.95rem;
             font-weight: 500;
             transition: all 0.2s ease;
         }
@@ -187,15 +194,15 @@
         /* Grid de productos */
         .products-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
         }
 
-        /* Tarjetas de productos compactas */
+        /* Tarjetas de productos con diseño moderno */
         .product-card {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 1rem;
+            border-radius: 16px;
+            padding: 1.5rem;
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.2s ease;
@@ -210,71 +217,71 @@
         }
 
         .product-name {
-            font-size: 1rem;
+            font-size: 1.125rem;
             font-weight: 600;
             color: var(--text-primary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
         }
 
         .product-category {
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
         .product-price {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             font-weight: 700;
             color: var(--accent-primary);
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .product-stock {
             display: inline-block;
-            padding: 0.2rem 0.6rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
             font-weight: 500;
         }
 
         .stock-available {
-            background: rgba(34, 197, 94, 0.1);
-            color: #22c55e;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
         .stock-low {
-            background: rgba(251, 191, 36, 0.1);
-            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
         }
 
         .stock-out {
             background: rgba(239, 68, 68, 0.1);
-            color: #ef4444;
+            color: var(--danger);
         }
 
         /* Empty state */
         .empty-state {
             text-align: center;
-            padding: 1.5rem;
+            padding: 3rem 1.5rem;
             color: var(--text-secondary);
             grid-column: 1 / -1;
         }
 
         .empty-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.75rem;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
             opacity: 0.5;
         }
 
         /* Last updated */
         .last-updated {
             text-align: center;
-            padding: 1rem;
+            padding: 1.5rem;
             color: var(--text-secondary);
-            font-size: 0.8rem;
+            font-size: 0.875rem;
         }
 
         /* Animaciones */
@@ -296,119 +303,34 @@
         .product-card:nth-child(6) { animation-delay: 0.3s; }
 
         /* Responsive */
-        @media (min-width: 640px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-            }
-        }
-
-        @media (min-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        @media (max-width: 640px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
             }
             
-            .app-title {
-                font-size: 1.35rem;
+            .theme-controls {
+                width: 100%;
+                justify-content: center;
             }
             
-            .theme-toggle {
-                padding: 0.35rem 0.85rem;
-                font-size: 0.8rem;
+            .main-container {
+                padding: 0 1rem;
+                margin: 1rem auto;
             }
             
             .filters {
-                justify-content: center;
-            }
-        }
-
-        /* Estilos específicos para móviles */
-        .mobile {
-            font-size: 14px;
-        }
-        
-        .mobile .header-content {
-            flex-direction: column;
-            gap: 0.5rem;
-            text-align: center;
-            padding: 0.5rem;
-        }
-        
-        .mobile .app-title {
-            font-size: 1.15rem;
-        }
-        
-        .mobile .app-subtitle {
-            font-size: 0.75rem;
-        }
-        
-        .mobile .theme-toggle {
-            padding: 0.2rem 0.5rem;
-            font-size: 0.7rem;
-        }
-        
-        .mobile .main-container {
-            padding: 0.5rem;
-            margin: 0.5rem auto;
-        }
-        
-        .mobile .filters {
-            gap: 0.25rem;
-        }
-        
-        .mobile .filter-btn {
-            padding: 0.25rem 0.75rem;
-            font-size: 0.8rem;
-        }
-        
-        .mobile .product-card {
-            padding: 0.85rem;
-        }
-        
-        .mobile .product-name {
-            font-size: 0.95rem;
-        }
-        
-        .mobile .product-price {
-            font-size: 1.15rem;
-        }
-        
-        /* Optimizaciones específicas para pantallas muy pequeñas */
-        .small-screen .product-name {
-            font-size: 0.9rem;
-        }
-        
-        .small-screen .product-price {
-            font-size: 1.1rem;
-        }
-        
-        .small-screen .product-stock {
-            font-size: 0.7rem;
-            padding: 0.1rem 0.4rem;
-        }
-        
-        /* iPhone específicos */
-        .iphone .header-content {
-            padding-top: env(safe-area-inset-top);
-        }
-        
-        /* Desktop */
-        @media (min-width: 768px) {
-            .desktop .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+                gap: 0.5rem;
             }
             
-            .desktop .app-title {
-                font-size: 1.35rem;
+            .filter-btn {
+                padding: 0.4rem 1rem;
+                font-size: 0.875rem;
             }
             
-            .desktop .header-content {
-                flex-direction: row;
-                text-align: left;
-            }
-            
-            .desktop .theme-toggle {
-                padding: 0.35rem 0.85rem;
-                font-size: 0.8rem;
+            .products-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -432,7 +354,7 @@
             <div class="theme-controls">
                 <button class="theme-toggle" id="themeToggle">
                     <span id="themeIcon">🌙</span>
-                    <span id="themeText">Oscuro</span>
+                    <span id="themeText">Modo Oscuro</span>
                 </button>
             </div>
         </div>
@@ -440,11 +362,14 @@
 
     <!-- Contenido Principal -->
     <main class="main-container">
-        <!-- Filtros -->
+        <!-- Filtros con nuevas categorías -->
         <div class="filters">
             <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-            <button class="filter-btn" onclick="filterProducts('media_mañana')">🌅 Mañana</button>
-            <button class="filter-btn" onclick="filterProducts('merienda')">🍪 Merienda</button>
+            <button class="filter-btn" onclick="filterProducts('bebidas')">🥤 Bebidas</button>
+            <button class="filter-btn" onclick="filterProducts('helados')">🍦 Helados</button>
+            <button class="filter-btn" onclick="filterProducts('snacks')">🍿 Snacks</button>
+            <button class="filter-btn" onclick="filterProducts('dulces')">🍬 Dulces</button>
+            <button class="filter-btn" onclick="filterProducts('comidas')">🍔 Comidas</button>
         </div>
 
         <!-- Grid de productos -->
@@ -462,7 +387,7 @@
     </main>
 
     <script>
-        // Configuración de Firebase
+        // Configuración de Firebase (corregida)
         const firebaseConfig = {
             apiKey: "AIzaSyAiDgpN9_nKneeYQ9vW41aBxwo3VWZnBN0",
             authDomain: "cafeteria-escolar.firebaseapp.com",
@@ -496,11 +421,11 @@
             if (theme === 'dark') {
                 document.body.classList.add('dark-mode');
                 document.getElementById('themeIcon').textContent = '☀️';
-                document.getElementById('themeText').textContent = 'Claro';
+                document.getElementById('themeText').textContent = 'Modo Claro';
             } else {
                 document.body.classList.remove('dark-mode');
                 document.getElementById('themeIcon').textContent = '🌙';
-                document.getElementById('themeText').textContent = 'Oscuro';
+                document.getElementById('themeText').textContent = 'Modo Oscuro';
             }
             localStorage.setItem('theme', theme);
         }
@@ -523,65 +448,6 @@
             }
         }
 
-        // Detectar tipo de dispositivo y adaptar la interfaz
-        function detectDeviceAndAdapt() {
-            const userAgent = navigator.userAgent.toLowerCase();
-            const screenWidth = window.screen.width;
-            const screenHeight = window.screen.height;
-            
-            // Detectar si es móvil
-            const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-            
-            // Detectar si es iPhone específico
-            const isiPhone = /iphone|ipod/i.test(userAgent);
-            const isAndroid = /android/i.test(userAgent);
-            
-            // Detectar tamaños específicos
-            const isSmallScreen = screenWidth <= 414; // iPhone XR, 12, etc.
-            const isLargeScreen = screenWidth > 1024; // Desktop
-            
-            // Agregar clases CSS según el dispositivo
-            document.body.classList.remove('mobile', 'desktop', 'iphone', 'android', 'small-screen');
-            
-            if (isMobile) {
-                document.body.classList.add('mobile');
-                if (isiPhone) document.body.classList.add('iphone');
-                if (isAndroid) document.body.classList.add('android');
-                if (isSmallScreen) document.body.classList.add('small-screen');
-            } else {
-                document.body.classList.add('desktop');
-            }
-            
-            // Optimizaciones específicas para móviles pequeños
-            if (isSmallScreen) {
-                // Ajustar tamaños de fuente
-                document.documentElement.style.fontSize = '14px';
-                
-                // Ajustar padding y márgenes
-                const style = document.createElement('style');
-                style.textContent = `
-                    .mobile .product-card {
-                        padding: 0.85rem !important;
-                    }
-                    .mobile .product-name {
-                        font-size: 0.95rem !important;
-                    }
-                    .mobile .product-price {
-                        font-size: 1.15rem !important;
-                    }
-                    .mobile .filter-btn {
-                        padding: 0.25rem 0.75rem !important;
-                        font-size: 0.8rem !important;
-                    }
-                `;
-                document.head.appendChild(style);
-            }
-            
-            console.log(`Dispositivo detectado: ${isMobile ? 'Móvil' : 'Desktop'}`);
-            console.log(`Tipo: ${isiPhone ? 'iPhone' : isAndroid ? 'Android' : 'Otro'}`);
-            console.log(`Tamaño: ${screenWidth}x${screenHeight}`);
-        }
-
         // Funciones de utilidad
         function getStockClass(quantity) {
             if (quantity === 0) return 'stock-out';
@@ -591,7 +457,7 @@
 
         function getStockText(quantity) {
             if (quantity === 0) return '❌ Agotado';
-            if (quantity <= 5) return `⚠️ ${quantity} disponibles`;
+            if (quantity <= 5) return `⚠️ Solo ${quantity} disponibles`;
             return `✅ ${quantity} disponibles`;
         }
 
@@ -600,6 +466,18 @@
                 style: 'currency',
                 currency: 'COP'
             }).format(amount);
+        }
+
+        // Obtener nombre de categoría con emoji
+        function getCategoryName(category) {
+            const categories = {
+                'bebidas': '🥤 Bebidas',
+                'helados': '🍦 Helados',
+                'snacks': '🍿 Snacks',
+                'dulces': '🍬 Dulces',
+                'comidas': '🍔 Comidas'
+            };
+            return categories[category] || category;
         }
 
         // Filtrar productos
@@ -652,7 +530,7 @@
                     <div class="product-card">
                         <h3 class="product-name">${product.name}</h3>
                         <div class="product-category">
-                            ${product.category === 'media_mañana' ? '🌅 Mañana' : '🍪 Merienda'}
+                            ${getCategoryName(product.category)}
                         </div>
                         <div class="product-price">${formatCurrency(product.price)}</div>
                         <div class="product-stock ${getStockClass(product.quantity)}">
@@ -670,13 +548,13 @@
             const now = new Date();
             const options = { 
                 year: 'numeric', 
-                month: 'short', 
+                month: 'long', 
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit'
             };
             document.getElementById('lastUpdated').textContent = 
-                `Actualizado: ${now.toLocaleDateString('es-ES', options)}`;
+                `Última actualización: ${now.toLocaleDateString('es-ES', options)}`;
         }
 
         // Inicializar cuando la página cargue
@@ -685,13 +563,10 @@
             setTimeout(() => {
                 document.getElementById('loader').style.opacity = '0';
                 document.getElementById('loader').style.visibility = 'hidden';
-            }, 500);
+            }, 800);
             
             // Inicializar tema
             initTheme();
-            
-            // Detectar dispositivo y adaptar
-            detectDeviceAndAdapt();
             
             // Event listeners
             document.getElementById('themeToggle').addEventListener('click', toggleTheme);
@@ -702,14 +577,6 @@
                 filterProducts(currentFilter);
                 updateLastUpdated();
             });
-        });
-        
-        // También ejecutar cuando se redimensiona la ventana
-        window.addEventListener('resize', detectDeviceAndAdapt);
-        
-        // Para dispositivos con orientación que cambia
-        window.addEventListener('orientationchange', () => {
-            setTimeout(detectDeviceAndAdapt, 100); // Pequeño delay para que se actualice el tamaño
         });
     </script>
 </body>
