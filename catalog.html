@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Cafetería - Cafetería Escolar</title>
+    <title>Catálogo - Papelería Escolar</title>
     <!-- PWA Configuration -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3b82f6">
@@ -345,10 +345,10 @@
     <header class="app-header">
         <div class="header-content">
             <div class="logo-container">
-                <div class="logo-icon">🍽️</div>
+                <div class="logo-icon">✏️</div>
                 <div>
-                    <h1 class="app-title">Menú Cafetería</h1>
-                    <p class="app-subtitle">Productos Disponibles Hoy</p>
+                    <h1 class="app-title">Catálogo Papelería</h1>
+                    <p class="app-subtitle">Productos Disponibles</p>
                 </div>
             </div>
             <div class="theme-controls">
@@ -365,11 +365,11 @@
         <!-- Filtros con nuevas categorías -->
         <div class="filters">
             <button class="filter-btn active" onclick="filterProducts('all')">Todos</button>
-            <button class="filter-btn" onclick="filterProducts('bebidas')">🥤 Bebidas</button>
-            <button class="filter-btn" onclick="filterProducts('helados')">🍦 Helados</button>
-            <button class="filter-btn" onclick="filterProducts('snacks')">🍿 Snacks</button>
-            <button class="filter-btn" onclick="filterProducts('dulces')">🍬 Dulces</button>
-            <button class="filter-btn" onclick="filterProducts('comidas')">🍔 Comidas</button>
+            <button class="filter-btn" onclick="filterProducts('cuadernos')">📘 Cuadernos</button>
+            <button class="filter-btn" onclick="filterProducts('lapices')">✏️ Lápices/Bolígrafos</button>
+            <button class="filter-btn" onclick="filterProducts('papeleria')">📎 Papelería</button>
+            <button class="filter-btn" onclick="filterProducts('utiles')">📏 Útiles Escolares</button>
+            <button class="filter-btn" onclick="filterProducts('colores')">🎨 Colores/Marcadores</button>
         </div>
 
         <!-- Grid de productos -->
@@ -387,7 +387,7 @@
     </main>
 
     <script>
-        // Configuración de Firebase (corregida)
+        // Configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAiDgpN9_nKneeYQ9vW41aBxwo3VWZnBN0",
             authDomain: "cafeteria-escolar.firebaseapp.com",
@@ -471,11 +471,11 @@
         // Obtener nombre de categoría con emoji
         function getCategoryName(category) {
             const categories = {
-                'bebidas': '🥤 Bebidas',
-                'helados': '🍦 Helados',
-                'snacks': '🍿 Snacks',
-                'dulces': '🍬 Dulces',
-                'comidas': '🍔 Comidas'
+                'cuadernos': '📘 Cuadernos',
+                'lapices': '✏️ Lápices/Bolígrafos',
+                'papeleria': '📎 Papelería',
+                'utiles': '📏 Útiles Escolares',
+                'colores': '🎨 Colores/Marcadores'
             };
             return categories[category] || category;
         }
