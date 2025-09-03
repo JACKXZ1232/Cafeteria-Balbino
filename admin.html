@@ -600,8 +600,11 @@
                         <label class="form-label">Categoría</label>
                         <select class="form-select" id="category">
                             <option value="">Seleccionar categoría</option>
-                            <option value="media_mañana">Media Mañana</option>
-                            <option value="merienda">Merienda</option>
+                            <option value="bebidas">Bebidas</option>
+                            <option value="helados">Helados</option>
+                            <option value="snacks">Snacks</option>
+                            <option value="dulces">Dulces</option>
+                            <option value="comidas">Comidas (Empanadas, Hamburguesas)</option>
                         </select>
                     </div>
                     <button type="submit" class="btn">
@@ -861,7 +864,7 @@
                             <strong>${product.name}</strong>
                             <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                 ${product.barcode ? '🔢 ' + product.barcode : ''}
-                                ${product.category === 'media_mañana' ? '🌅 Media Mañana' : '🍪 Merienda'}
+                                ${getCategoryName(product.category)}
                             </div>
                         </td>
                         <td>${formatCurrency(product.price)}</td>
@@ -885,6 +888,18 @@
                 `;
             });
             tbody.innerHTML = html;
+        }
+
+        // Obtener nombre de categoría
+        function getCategoryName(category) {
+            const categories = {
+                'bebidas': '🥤 Bebidas',
+                'helados': '🍦 Helados',
+                'snacks': '🍿 Snacks',
+                'dulces': '🍬 Dulces',
+                'comidas': '🍔 Comidas'
+            };
+            return categories[category] || category;
         }
 
         // Agregar producto
