@@ -100,7 +100,7 @@
 <body>
     <div class="container">
         <div class="logo">
-            <img src="https://i.postimg.cc/25b0wbYb/descarga.png" alt="Colegio Balbino García" class="logo-img">
+            <img src="https://i.postimg.cc/25b0wbYb/descarga.png" alt="Logo Colegio Balbino García" class="logo-img">
         </div>
         <h1>Papelería Escolar – Colegio Balbino García</h1>
         <p>Accediendo al catálogo de productos...</p>
@@ -111,14 +111,11 @@
         <a href="catalog.html" class="btn">Ver Catálogo</a>
     </div>
     <script>
-        // Animación de progreso profesional
         function startProgress() {
             const progressBar = document.getElementById('progressBar');
             const counter = document.getElementById('counter');
             let seconds = 3;
-            // Iniciar animación de barra
             progressBar.style.width = '100%';
-            // Contador regresivo
             const timer = setInterval(() => {
                 seconds--;
                 counter.textContent = `Redirigiendo en ${seconds} segundos`;
@@ -128,7 +125,6 @@
                 }
             }, 1000);
         }
-        // Iniciar cuando la página cargue
         window.addEventListener('load', startProgress);
     </script>
 </body>
