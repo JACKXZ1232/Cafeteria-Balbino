@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Papelería Escolar</title>
+    <title>Papelería Escolar - Colegio Balbino García</title>
     <style>
         * {
             margin: 0;
@@ -29,12 +29,13 @@
             border: 1px solid #e2e8f0;
         }
         .logo {
-            font-size: 3rem;
             margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            display: flex;
+            justify-content: center;
+        }
+        .logo-img {
+            height: 60px;
+            width: auto;
         }
         h1 {
             font-size: 1.75rem;
@@ -98,8 +99,10 @@
 </head>
 <body>
     <div class="container">
-        <div class="logo">✏️</div>
-        <h1>Papelería Escolar</h1>
+        <div class="logo">
+            <img src="https://i.postimg.cc/25b0wbYb/descarga.png" alt="Logo Colegio Balbino García" class="logo-img">
+        </div>
+        <h1>Papelería Escolar – Colegio Balbino García</h1>
         <p>Accediendo al catálogo de productos...</p>
         <div class="progress-container">
             <div class="progress-bar" id="progressBar"></div>
@@ -107,30 +110,21 @@
         <div class="counter" id="counter">Redirigiendo en 3 segundos</div>
         <a href="catalog.html" class="btn">Ver Catálogo</a>
     </div>
-
     <script>
-        // Animación de progreso profesional
         function startProgress() {
             const progressBar = document.getElementById('progressBar');
             const counter = document.getElementById('counter');
             let seconds = 3;
-            
-            // Iniciar animación de barra
             progressBar.style.width = '100%';
-            
-            // Contador regresivo
             const timer = setInterval(() => {
                 seconds--;
                 counter.textContent = `Redirigiendo en ${seconds} segundos`;
-                
                 if (seconds <= 0) {
                     clearInterval(timer);
                     window.location.href = 'catalog.html';
                 }
             }, 1000);
         }
-
-        // Iniciar cuando la página cargue
         window.addEventListener('load', startProgress);
     </script>
 </body>
