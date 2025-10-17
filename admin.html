@@ -578,13 +578,14 @@
                                 <th>Producto</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
+                                <th>Valor Total</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="inventoryTableBody">
                             <tr>
-                                <td colspan="5">
+                                <td colspan="6">
                                     <div class="empty-state">
                                         <div class="empty-icon">📭</div>
                                         <p>No hay productos registrados</p>
@@ -769,13 +770,15 @@
             const tbody = document.getElementById('inventoryTableBody');
             if (!products || Object.keys(products).length === 0) {
                 tbody.innerHTML = `
-                    <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">📭</div><p>No hay productos registrados</p></div></td></tr>
+                    <tr><td colspan="6"><div class="empty-state"><div class="empty-icon">📭</div><p>No hay productos registrados</p></div></td></tr>
                 `;
                 return;
             }
             let html = '';
             Object.keys(products).forEach(key => {
                 const product = products[key];
+                const totalValue = (product.price || 0) * (product.quantity || 0);
+
                 html += `
                     <tr>
                         <td>
@@ -792,6 +795,7 @@
                                    onchange="updateProduct('${key}', this.value)" 
                                    style="width: 70px; padding: 0.25rem; border: 1px solid var(--border-color); border-radius: 6px; background: var(--bg-secondary); color: var(--text-primary);">
                         </td>
+                        <td><strong>${formatCurrency(totalValue)}</strong></td>
                         <td>
                             <span class="status-badge ${getStatusClass(product.quantity)}">
                                 ${getStatusText(product.quantity)}
